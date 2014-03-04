@@ -1,7 +1,7 @@
 #!/usr/bin/env python2.7
 import os
 import datetime
-import time
+import sys
 
 
 
@@ -53,10 +53,14 @@ class logs():
         self.f.close()
 
 
-def main():
+def main(other_dir = None):
     history = logs()
 
-    dirs = ['/home/lokiteitor/Musica']
+    dirs = ['/home/lokiteitor/Musica','/run/media/lokiteitor/LOKITEITOR/musica']
+
+    if other_dir != None:
+        other_dir = str(other_dir)
+        searching(other_dir,history)
 
     for i in dirs:
         searching(i,history)
@@ -64,4 +68,4 @@ def main():
     history.writecandidate()
 
 if __name__ == '__main__':
-    main()
+    main(sys.argv[1:])
