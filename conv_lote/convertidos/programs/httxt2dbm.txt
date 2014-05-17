@@ -1,0 +1,36 @@
+﻿Modules | Directives | FAQ | Glossary | Sitemap
+Apache HTTP Server Version 2.4
+
+
+Apache > HTTP Server > Documentation > Version 2.4 > Programs
+
+httxt2dbm - Generate dbm files for use with RewriteMap
+httxt2dbm is used to generate dbm files from text input, for use in RewriteMap with the dbm map type.
+If the output file already exists, it will not be truncated. New keys will be added and existing keys will be updated.
+ Synopsis 
+ Options 
+ Examples 
+See also
+httpd
+mod_rewrite
+
+Synopsis
+httxt2dbm [ -v ] [ -f DBM_TYPE ] -i SOURCE_TXT -o OUTPUT_DBM 
+
+Options
+-v 
+More verbose output 
+-f DBM_TYPE 
+Specify the DBM type to be used for the output. If not specified, will use the APR Default. Available types are: GDBM for GDBM files, SDBM for SDBM files, DB for berkeley DB files, NDBM for NDBM files, default for the default DBM type. 
+-i SOURCE_TXT 
+Input file from which the dbm is to be created. The file should be formated with one record per line, of the form: key value. See the documentation for RewriteMap for further details of this file's format and meaning. 
+-o OUTPUT_DBM 
+Name of the output dbm files. 
+
+Examples
+httxt2dbm -i rewritemap.txt -o rewritemap.dbm
+httxt2dbm -f SDBM -i rewritemap.txt -o rewritemap.dbm
+Copyright 2014 The Apache Software Foundation.
+Licensed under the Apache License, Version 2.0.
+Modules | Directives | FAQ | Glossary | Sitemap
+

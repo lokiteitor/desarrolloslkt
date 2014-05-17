@@ -1,0 +1,42 @@
+﻿Modules | Directives | FAQ | Glossary | Sitemap
+Apache HTTP Server Version 2.4
+
+
+Apache > HTTP Server > Documentation > Version 2.4
+
+Terms Used to Describe Modules
+This document describes the terms that are used to describe each Apache module.
+ Description 
+ Status 
+ Source File 
+ Module Identifier 
+ Compatibility 
+
+Description
+A brief description of the purpose of the module.
+
+Status
+This indicates how tightly bound into the Apache Web server the module is; in other words, you may need to recompile the server in order to gain access to the module and its functionality. Possible values for this attribute are:
+MPM 
+A module with status "MPM" is a Multi-Processing Module. Unlike the other types of modules, Apache must have one and only one MPM in use at any time. This type of module is responsible for basic request handling and dispatching. 
+Base 
+A module labeled as having "Base" status is compiled and loaded into the server by default, and is therefore normally available unless you have taken steps to remove the module from your configuration. 
+Extension 
+A module with "Extension" status is not normally compiled and loaded into the server. To enable the module and its functionality, you may need to change the server build configuration files and re-compile Apache. 
+Experimental 
+"Experimental" status indicates that the module is available as part of the Apache kit, but you are on your own if you try to use it. The module is being documented for completeness, and is not necessarily supported. 
+External 
+Modules which are not included with the base Apache distribution ("third-party modules") may use the "External" status. We are not responsible for, nor do we support such modules. 
+
+Source File
+This quite simply lists the name of the source file which contains the code for the module. This is also the name used by the <IfModule> directive.
+
+Module Identifier
+This is a string which identifies the module for use in the LoadModule directive when dynamically loading modules. In particular, it is the name of the external variable of type module in the source file.
+
+Compatibility
+If the module was not part of the original Apache version 2 distribution, the version in which it was introduced should be listed here. In addition, if the module is limited to particular platforms, the details will be listed here.
+Copyright 2014 The Apache Software Foundation.
+Licensed under the Apache License, Version 2.0.
+Modules | Directives | FAQ | Glossary | Sitemap
+

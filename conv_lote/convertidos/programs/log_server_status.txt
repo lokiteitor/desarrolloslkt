@@ -1,0 +1,21 @@
+﻿Modules | Directives | FAQ | Glossary | Sitemap
+Apache HTTP Server Version 2.4
+
+
+Apache > HTTP Server > Documentation > Version 2.4 > Programs
+
+log_server_status - Log periodic status summaries
+This perl script is designed to be run at a frequent interval by something like cron. It connects to the server and downloads the status information. It reformats the information to a single line and logs it to a file. Adjust the variables at the top of the script to specify the location of the resulting logfile. mod_status will need to be loaded and configured in order for this script to do its job.
+
+Usage
+The script contains the following section.
+my $wherelog = "/usr/local/apache2/logs/";  # Logs will be like "/usr/local/apache2/logs/19960312"
+my $server   = "localhost";        # Name of server, could be "www.foo.com"
+my $port     = "80";               # Port on server
+my $request = "/server-status/?auto";    # Request to send
+You'll need to ensure that these variables have the correct values, and you'll need to have the /server-status handler configured at the location specified, and the specified log location needs to be writable by the user which will run the script.
+Run the script periodically via cron to produce a daily log file, which can then be used for statistical analysis.
+Copyright 2014 The Apache Software Foundation.
+Licensed under the Apache License, Version 2.0.
+Modules | Directives | FAQ | Glossary | Sitemap
+

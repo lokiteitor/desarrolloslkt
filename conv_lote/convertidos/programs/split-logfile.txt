@@ -1,0 +1,20 @@
+﻿Modules | Directives | FAQ | Glossary | Sitemap
+Apache HTTP Server Version 2.4
+
+
+Apache > HTTP Server > Documentation > Version 2.4 > Programs
+
+split-logfile - Split up multi-vhost logfiles
+This perl script will take a combined Web server access log file and break its contents into separate files. It assumes that the first field of each line is the virtual host identity, put there using the "%v" variable in LogFormat. 
+
+Usage
+Create a log file with virtual host information in it:
+LogFormat "%v %h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\"" combined_plus_vhost
+CustomLog logs/access_log combined_plus_vhost
+Log files will be created, in the directory where you run the script, for each virtual host name that appears in the combined log file. These logfiles will named after the hostname, with a .log file extension.
+The combined log file is read from stdin. Records read will be appended to any existing log files.
+split-logfile < access_log
+Copyright 2014 The Apache Software Foundation.
+Licensed under the Apache License, Version 2.0.
+Modules | Directives | FAQ | Glossary | Sitemap
+

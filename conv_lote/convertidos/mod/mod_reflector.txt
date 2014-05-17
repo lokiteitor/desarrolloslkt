@@ -1,0 +1,56 @@
+﻿Modules | Directives | FAQ | Glossary | Sitemap
+Apache HTTP Server Version 2.4
+
+
+Apache > HTTP Server > Documentation > Version 2.4 > Modules
+
+Apache Module mod_reflector
+Description:
+Reflect a request body as a response via the output filter stack.
+Status:
+Base
+Module Identifier:
+reflector_module
+Source File:
+mod_reflector.c
+Compatibility:
+Version 2.3 and later
+Summary
+This module allows request bodies to be reflected back to the client, in the process passing the request through the output filter stack. A suitably configured chain of filters can be used to transform the request into a response. This module can be used to turn an output filter into an HTTP service.
+Directives
+ ReflectorHeader 
+Topics
+ Examples 
+
+Examples
+Compression service 
+Pass the request body through the DEFLATE filter to compress the body. This request requires a Content-Encoding request header containing "gzip" for the filter to return compressed data. 
+<Location /compress>
+    SetHandler reflector
+    SetOutputFilter DEFLATE
+</Location>
+Image downsampling service 
+Pass the request body through an image downsampling filter, and reflect the results to the caller. 
+<Location /downsample>
+    SetHandler reflector
+    SetOutputFilter DOWNSAMPLE
+</Location>
+
+ReflectorHeader Directive
+Description:
+Reflect an input header to the output headers
+Syntax:
+ReflectorHeader inputheader [outputheader]
+Context:
+server config, virtual host, directory, .htaccess
+Override:
+Options
+Status:
+Base
+Module:
+mod_reflector
+This directive controls the reflection of request headers to the response. The first argument is the name of the request header to copy. If the optional second argument is specified, it will be used as the name of the response header, otherwise the original request header name will be used.
+Copyright 2014 The Apache Software Foundation.
+Licensed under the Apache License, Version 2.0.
+Modules | Directives | FAQ | Glossary | Sitemap
+

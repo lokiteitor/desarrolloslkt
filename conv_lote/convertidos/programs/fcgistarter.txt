@@ -1,0 +1,32 @@
+﻿Modules | Directives | FAQ | Glossary | Sitemap
+Apache HTTP Server Version 2.4
+
+
+Apache > HTTP Server > Documentation > Version 2.4 > Programs
+
+fcgistarter - Start a FastCGI program
+ Note 
+ Synopsis 
+ Options 
+See also
+mod_proxy_fcgi
+
+Note
+Currently only works on Unix systems.
+
+Synopsis
+fcgistarter -c command -p port [ -i interface ] -N num 
+
+Options
+-c command 
+FastCGI program 
+-p port 
+Port which the program will listen on 
+-i interface 
+Interface which the program will listen on 
+-N num 
+Number of instances of the program 
+Copyright 2014 The Apache Software Foundation.
+Licensed under the Apache License, Version 2.0.
+Modules | Directives | FAQ | Glossary | Sitemap
+

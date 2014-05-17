@@ -1,0 +1,30 @@
+﻿Modules | Directives | FAQ | Glossary | Sitemap
+Apache HTTP Server Version 2.4
+
+
+Apache > HTTP Server > Documentation > Version 2.4 > Modules
+
+Apache Module mod_proxy_fdpass
+Description:
+fdpass external process support module for mod_proxy
+Status:
+Extension
+Module Identifier:
+proxy_fdpass_module
+Source File:
+mod_proxy_fdpass.c
+Compatibility:
+Available for unix in version 2.3 and later
+Summary
+This module requires the service of mod_proxy. It provides support for the passing the socket of the client to another process.
+mod_proxy_fdpass uses the ability of AF_UNIX domain sockets to pass an open file descriptor to allow another process to finish handling a request. 
+The module has a proxy_fdpass_flusher provider interface, which allows another module to optionally send the response headers, or even the start of the response body. The default flush provider disables keep-alive, and sends the response headers, letting the external process just send a response body.
+At this time the only data passed to the external process is the client socket. To receive a client socket, call recvfrom with an allocated struct cmsghdr. Future versions of this module may include more data after the client socket, but this is not implemented at this time. 
+Directives
+This module provides no directives.
+See also
+mod_proxy 
+Copyright 2014 The Apache Software Foundation.
+Licensed under the Apache License, Version 2.0.
+Modules | Directives | FAQ | Glossary | Sitemap
+

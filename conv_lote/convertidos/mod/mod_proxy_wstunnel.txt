@@ -1,0 +1,32 @@
+﻿Modules | Directives | FAQ | Glossary | Sitemap
+Apache HTTP Server Version 2.4
+
+
+Apache > HTTP Server > Documentation > Version 2.4 > Modules
+
+Apache Module mod_proxy_wstunnel
+Description:
+Websockets support module for mod_proxy
+Status:
+Extension
+Module Identifier:
+proxy_wstunnel_module
+Source File:
+mod_proxy_wstunnel.c
+Compatibility:
+Available for unix in version 2.4.5 and later
+Summary
+This module requires the service of mod_proxy. It provides support for the tunnelling of web socket connections to a backend websockets server. The connection is automagically upgraded to a websocket connection:
+Upgrade: WebSocket
+Connection: Upgrade
+Proxying requests to websockets server
+ProxyPass /ws2/  ws://echo.websocket.org/
+ProxyPass /wss2/ wss://echo.websocket.org/
+Directives
+This module provides no directives.
+See also
+mod_proxy 
+Copyright 2014 The Apache Software Foundation.
+Licensed under the Apache License, Version 2.0.
+Modules | Directives | FAQ | Glossary | Sitemap
+

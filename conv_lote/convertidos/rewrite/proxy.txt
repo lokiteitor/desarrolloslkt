@@ -1,0 +1,39 @@
+﻿Modules | Directives | FAQ | Glossary | Sitemap
+Apache HTTP Server Version 2.4
+
+
+Apache > HTTP Server > Documentation > Version 2.4 > Rewrite
+
+Using mod_rewrite for Proxying
+This document supplements the mod_rewrite reference documentation. It describes how to use the RewriteRule's [P] flag to proxy content to another server. A number of recipes are provided that describe common scenarios.
+See also
+Module documentation
+mod_rewrite introduction
+Redirection and remapping
+Controlling access
+Virtual hosts
+Using RewriteMap
+Advanced techniques
+When not to use mod_rewrite
+
+Proxying Content with mod_rewrite
+Description: 
+mod_rewrite provides the [P] flag, which allows URLs to be passed, via mod_proxy, to another server. Two examples are given here. In one example, a URL is passed directly to another server, and served as though it were a local URL. In the other example, we proxy missing content to a back-end server.
+Solution: 
+To simply map a URL to another server, we use the [P] flag, as follows:
+RewriteEngine  on
+RewriteBase    /products/
+RewriteRule    ^widget/(.*)$  http://product.example.com/widget/$1  [P]
+ProxyPassReverse /products/widget/ http://product.example.com/widget/
+In the second example, we proxy the request only if we can't find the resource locally. This can be very useful when you're migrating from one server to another, and you're not sure if all the content has been migrated yet.
+RewriteCond %{REQUEST_FILENAME}       !-f
+RewriteCond %{REQUEST_FILENAME}       !-d
+RewriteRule ^/(.*) http://old.example.com/$1 [P]
+ProxyPassReverse / http://old.example.com/
+Discussion: 
+In each case, we add a ProxyPassReverse directive to ensure that any redirects issued by the backend are correctly passed on to the client.
+Consider using either ProxyPass or ProxyPassMatch whenever possible in preference to mod_rewrite.
+Copyright 2014 The Apache Software Foundation.
+Licensed under the Apache License, Version 2.0.
+Modules | Directives | FAQ | Glossary | Sitemap
+

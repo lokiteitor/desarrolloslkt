@@ -1,0 +1,78 @@
+﻿Modules | Directives | FAQ | Glossary | Sitemap
+Apache HTTP Server Version 2.4
+
+
+Apache > HTTP Server > Documentation > Version 2.4 > Platform Specific Notes
+
+Using Apache With RPM Based Systems (Redhat / CentOS / Fedora)
+While many distributions make Apache httpd available as operating system supported packages, it can sometimes be desirable to install and use the canonical version of Apache httpd on these systems, replacing the natively provided versions of the packages.
+While the Apache httpd project does not currently create binary RPMs for the various distributions out there, it is easy to build your own binary RPMs from the canonical Apache httpd tarball.
+This document explains how to build, install, configure and run Apache httpd 2.4 under Unix systems supporting the RPM packaging format.
+ Creating a Source RPM 
+ Building RPMs 
+ Installing the Server 
+ Configuring the Default Instance of Apache httpd 
+ Configuring Additional Instances of Apache httpd on the Same Machine 
+
+Creating a Source RPM
+The Apache httpd source tarball can be converted into an SRPM as follows:
+rpmbuild -ts httpd-2.4.x.tar.bz2 
+
+Building RPMs
+RPMs can be built directly from the Apache httpd source tarballs using the following command:
+rpmbuild -tb httpd-2.4.x.tar.bz2 
+Corresponding "-devel" packages will be required to be installed on your build system prior to building the RPMs, the rpmbuild command will automatically calculate what RPMs are required and will list any dependencies that are missing on your system. These "-devel" packages will not be required after the build is completed, and can be safely removed.
+If successful, the following RPMs will be created:
+httpd-2.4.x-1.i686.rpm 
+The core server and basic module set. 
+httpd-debuginfo-2.4.x-1.i686.rpm 
+Debugging symbols for the server and all modules. 
+httpd-devel-2.4.x-1.i686.rpm 
+Headers and development files for the server. 
+httpd-manual-2.4.x-1.i686.rpm 
+The webserver manual. 
+httpd-tools-2.4.x-1.i686.rpm 
+Supporting tools for the webserver. 
+mod_authnz_ldap-2.4.x-1.i686.rpm 
+mod_ldap and mod_authnz_ldap, with corresponding dependency on openldap. 
+mod_lua-2.4.x-1.i686.rpm 
+mod_lua module, with corresponding dependency on lua. 
+mod_proxy_html-2.4.x-1.i686.rpm 
+mod_proxy_html module, with corresponding dependency on libxml2. 
+mod_socache_dc-2.4.x-1.i686.rpm 
+mod_socache_dc module, with corresponding dependency on distcache. 
+mod_ssl-2.4.x-1.i686.rpm 
+mod_ssl module, with corresponding dependency on openssl. 
+
+Installing the Server
+The httpd RPM is the only RPM necessary to get a basic server to run. Install it as follows:
+rpm -U httpd-2.4.x-1.i686.rpm 
+Self contained modules are included with the server. Modules that depend on external libraries are provided as separate RPMs to install if needed.
+
+Configuring the Default Instance of Apache httpd
+The default configuration for the server is installed by default beneath the /etc/httpd directory, with logs written by default to /var/log/httpd. The environment for the webserver is set by default within the optional /etc/sysconfig/httpd file.
+Start the server as follows:
+service httpd restart 
+
+Configuring Additional Instances of Apache httpd on the Same Machine
+It is possible to configure additional instances of the Apache httpd server running independently alongside each other on the same machine. These instances can have independent configurations, and can potentially run as separate users if so configured.
+This was done by making the httpd startup script aware of its own name. This name is then used to find the environment file for the server, and in turn, the server root of the server instance.
+To create an additional instance called httpd-additional, follow these steps:
+Create a symbolic link to the startup script for the additional server: 
+ln -s /etc/rc.d/init.d/httpd /etc/rc.d/init.d/httpd-additional
+chkconfig --add httpd-additional 
+Create an environment file for the server, using the /etc/sysconfig/httpd file as a template: 
+# template from httpd
+cp /etc/sysconfig/httpd /etc/sysconfig/httpd-additional 
+# blank template
+touch /etc/sysconfig/httpd-additional 
+Edit /etc/sysconfig/httpd-additional and pass the server root of the new server instance within the OPTIONS environment variable. 
+OPTIONS="-d /etc/httpd-additional -f conf/httpd-additional.conf" 
+Edit the server configuration file /etc/httpd-additional/conf/httpd-additional.conf to ensure the correct ports and paths are configured. 
+Start the server as follows: 
+service httpd-additional restart 
+Repeat this process as required for each server instance. 
+Copyright 2014 The Apache Software Foundation.
+Licensed under the Apache License, Version 2.0.
+Modules | Directives | FAQ | Glossary | Sitemap
+

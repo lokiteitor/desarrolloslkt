@@ -1,0 +1,60 @@
+﻿Modules | Directives | FAQ | Glossary | Sitemap
+Apache HTTP Server Version 2.4
+
+
+Apache > HTTP Server > Documentation > Version 2.4 > Modules
+
+Apache Module mod_authz_groupfile
+Description:
+Group authorization using plaintext files
+Status:
+Base
+Module Identifier:
+authz_groupfile_module
+Source File:
+mod_authz_groupfile.c
+Compatibility:
+Available in Apache 2.1 and later
+Summary
+This module provides authorization capabilities so that authenticated users can be allowed or denied access to portions of the web site by group membership. Similar functionality is provided by mod_authz_dbm.
+Directives
+ AuthGroupFile 
+Topics
+ The Require Directives 
+See also
+Require 
+
+The Require Directives
+Apache's Require directives are used during the authorization phase to ensure that a user is allowed to access a resource. mod_authz_groupfile extends the authorization types with group and group-file. 
+Since v2.5.0, expressions are supported within the groupfile require directives.
+Require group
+This directive specifies group membership that is required for the user to gain access.
+Require group admin
+Require file-group
+When this directive is specified, the user must be a member of the group assigned to the file being accessed.
+Require file-group
+
+AuthGroupFile Directive
+Description:
+Sets the name of a text file containing the list of user groups for authorization
+Syntax:
+AuthGroupFile file-path
+Context:
+directory, .htaccess
+Override:
+AuthConfig
+Status:
+Base
+Module:
+mod_authz_groupfile
+The AuthGroupFile directive sets the name of a textual file containing the list of user groups for user authorization. File-path is the path to the group file. If it is not absolute, it is treated as relative to the ServerRoot.
+Each line of the group file contains a groupname followed by a colon, followed by the member usernames separated by spaces.
+Example:
+mygroup: bob joe anne 
+Note that searching large text files is very inefficient; AuthDBMGroupFile provides a much better performance.
+Security
+Make sure that the AuthGroupFile is stored outside the document tree of the web-server; do not put it in the directory that it protects. Otherwise, clients may be able to download the AuthGroupFile.
+Copyright 2014 The Apache Software Foundation.
+Licensed under the Apache License, Version 2.0.
+Modules | Directives | FAQ | Glossary | Sitemap
+

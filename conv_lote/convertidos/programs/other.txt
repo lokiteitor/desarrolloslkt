@@ -1,0 +1,14 @@
+﻿Modules | Directives | FAQ | Glossary | Sitemap
+Apache HTTP Server Version 2.4
+
+
+Apache > HTTP Server > Documentation > Version 2.4 > Programs
+
+Other Programs
+This page used to contain documentation for programs which now have their own docs pages. Please update any links.
+log_server_status
+split-logfile
+Copyright 2014 The Apache Software Foundation.
+Licensed under the Apache License, Version 2.0.
+Modules | Directives | FAQ | Glossary | Sitemap
+
