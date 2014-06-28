@@ -3,7 +3,10 @@ import os
 import datetime
 import sys
 
-
+# pasar como argumento una path
+# si no existe recorrera la carpeta musica en home
+# y la carpeta musica del celular las cuales estan definidas en dirs funcion
+# main
 
 def searching(path,log):
 
