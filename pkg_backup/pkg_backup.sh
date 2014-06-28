@@ -15,6 +15,7 @@
 # de tranferencia a dispositivo extraible
 
 rsync  -avv /var/cache/pacman/pkg/ $HOME/Documentos/pkgbackup/pkg/
+rsync -vv /etc/pacman.conf $HOME/Documentos/pkgbackup/pkg
 LISTA=`ls  $HOME/Documentos/pkgbackup/pkg/`
 
 
