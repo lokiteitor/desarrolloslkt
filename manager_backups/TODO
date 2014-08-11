@@ -41,15 +41,14 @@
 9 instalar directorios xdg y configurarlos
 	xdg-user-dirs
 10 instalar plugins
-	ffmpeg
-	gst-libav
-gst-plugins-bad
-gst-plugins-base
-gst-plugins-good
-gst-plugins-ugly
-gst-vaapi
-gst-plugin-libde265-git
-libde265
+	ffmpeg	gst-libav gst-plugins-bad gst-plugins-base gst-plugins-good
+	gst-plugins-ugly gst-vaapi gst-plugin-libde265-git libde265
+	
+
+	gstreamer0.10-bad-plugins gstreamer0.10-base-plugins
+	gstreamer0.10-ffmpeg gstreamer0.10-good-plugins
+	gstreamer0.10-good-plugins-slim gstreamer0.10-ugly-plugins
+	gstreamer0.10-vaapi gstreamer0.10-plugin-libde265-git
 
 ## a partir son elecciones personales
 
