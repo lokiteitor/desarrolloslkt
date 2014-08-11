@@ -42,8 +42,14 @@
 	xdg-user-dirs
 10 instalar plugins
 	ffmpeg
-
-
+	gst-libav
+gst-plugins-bad
+gst-plugins-base
+gst-plugins-good
+gst-plugins-ugly
+gst-vaapi
+gst-plugin-libde265-git
+libde265
 
 ## a partir son elecciones personales
 
