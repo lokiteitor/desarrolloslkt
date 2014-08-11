@@ -1,0 +1,54 @@
+## pasos para hacer la instalacion
+
+1 conectarse a la red
+2 particionar formatear y montar particiones
+3 instalar paquetes base , linux-lts
+3.1 pasar cache de memoria hacia cache de objetivo
+4 generar fstab y hacer chroot
+
+## solo hasta aqui se dispone de un interprete python
+
+1 instalar python
+2 si linux esta instalado no hacer nada si no instalarlo desde el repo local
+3 configurar idioma
+4 configurar zona horaria
+5 configurar nombre de maquina
+6 instalar para red
+	iw wpa_supplicant wpa_actiond dialog
+
+7 establecer contrasena
+8 instalar grub
+	grub os-prober
+9 desmontar y reiniciar
+
+## aqui termina la parte desde el livecd
+
+## empieza la parte en el sistema recien instalado
+
+1 agregar usuario
+2 conectarse a la red y activarla en cada reinicio
+3 instalar xorg servidor grafico
+	xorg-server xorg-xinit
+4 instalar controladores graficos la eleccion de cual debe ser especificada
+	xf86-video-vesa xf86-video-intel 
+5 instalar el DE especificado
+	xfce4 xfce4-goodies 
+6 configurar xinit
+7 desmutear audio
+	alsa-utils
+8 instalar fuentes
+	ttf-dejavu
+9 instalar directorios xdg y configurarlos
+	xdg-user-dirs
+10 instalar plugins
+	ffmpeg
+
+
+
+## a partir son elecciones personales
+
+1 opcional: instalar pulseaudio
+	pulseaudio pavucontrol pulseaudio-alsa
+2 instalar navegador
+	chromium
+3 configurar alias
