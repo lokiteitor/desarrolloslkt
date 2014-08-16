@@ -38,6 +38,7 @@
 
 import sys
 import getopt
+#import json
 
 
 # entidad de entrada de datos a traves de linea de comandos
@@ -96,6 +97,15 @@ class Gui():
             self.request = True
 
             return self.task
+class Ficheros():
+    """clase base para administrar ficheros y directorios"""
+    def __init__(self):
+        
+        pass
+
+    def ReadFile():
+        pass
+
 
 class Router():
     """se encarga de gestionar los argumentos ejecutando las tareas asignadas 
@@ -174,7 +184,35 @@ class Router():
     
     def __doTask(self,pack,switch):
         pass
-                
+
+
+
+
+class ParserConfig():
+    """encuentra las configuraciones del archivo de objetivos entre otras cosas
+       es capaz ademas de agregar objetivos predefinidos, abastece de objetivos 
+       al sistema de tareas"""
+    def __init__(self):
+        pass
+
+    def getAllTarget(self):
+        
+        pass
+
+class ParserJson(Ficheros):
+    """obtiene y sobrescribe la configuracion de un objeto json"""
+    def __init__(self):
+        super(Ficheros, self).__init__()
+
+
+
+
+
+        
+        
+
+
+        
 
 if __name__ == '__main__':
 
