@@ -8,21 +8,24 @@ import glob
 # haciendo uso de FFMPEG
 
 
-SALIDA = os.environ['HOME']+'/Musica/convertidos/'
-LISTOS = os.environ['HOME']+'/Videos/listos/'
-LOG = os.environ['HOME']+'/Documentos/mis_logs/music_conv.log'
+SALIDA = os.environ['HOME']+'/convertidos/'
+LISTOS = os.environ['HOME']+'/listos/'
+LOG = os.environ['HOME']+'/mis_logs/music_conv.log'
 
 def main(path):
     os.chdir(path)
 
     
-    lista = glob.glob('*.3gp')
+    lista = glob.glob('*.3gp') + glob.glob('*.mp4')
 
     if not os.path.exists(os.environ['HOME']+'/Musica/convertidos/'):
         os.mkdir(os.environ['HOME']+'/Musica/convertidos')
 
     if not os.path.exists(os.environ['HOME']+'/Videos/listos/'):
         os.mkdir(os.environ['HOME']+'/Videos/listos/')
+
+    if not os.path.exists(os.environ['HOME']+'/Documentos/mis_logs'):
+        os.mkdir(os.environ['HOME']+'/Documentos/mis_logs')
 
 
 
@@ -40,7 +43,7 @@ def main(path):
             other_i = other_i.replace('`','\\`')
 
             out = os.path.splitext(other_i)[0] + '.mp3'
-            orden = 'ffmpeg -i %s -vn -ar 44100 -ac 2 -ab 128k -f mp3 '%other_i
+            orden = 'ffmpeg -i %s -vn -ar 44100 -ac 2 -ab 256k -f mp3 '%other_i
             orden = orden + out
             os.system(orden)
 
@@ -52,6 +55,7 @@ def main(path):
                         shutil.move(i,LISTOS)
                     except:
                         log.write('el archivo %s ya existe\n'%SALIDA)
+                        #TODO : remover el archivo duplicado
 
 
         else:
