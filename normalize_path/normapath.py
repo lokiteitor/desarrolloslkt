@@ -8,6 +8,7 @@ import getopt
 
 import pdb
 
+
 class Log(object):
     """Administrador de errores"""
     def __init__(self):
@@ -25,7 +26,7 @@ class Log(object):
 
             now = datetime.datetime.now().strftime('%d/%m/%Y'+'  %H:%M')
 
-            filelog.write(str(self.Logmodule)+'\n')
+            filelog.write('\n\n'+str(self.Logmodule)+'\n')
             filelog.write(now+'\n')
 
             for i in self.listerrors:
@@ -50,8 +51,6 @@ class Normalize(Log):
         if lst:
             self.lst = lst
 
-            for i in self.lst:
-                self.filter(i)
 
     def Check(self):
 
@@ -71,30 +70,43 @@ class Normalize(Log):
 
         # TODO : Ordenar por fallas e imprimir en orden clasificado
 
-        print "el archivo %s necesita atencion"
+        print "el archivo %s necesita atencion"%path
         print "     " + error
 
         regerror = path + ' : ' + error
 
         self.listerrors.append(regerror)
         
-    def filter(self,path,isuri=False):
-        
+    def filter(self,path,isuri=True):
+        # TODO : error al acceder a un elemento fuera de rango en la comprobacion
+        # del directorio
+
+
         if isuri:
             if not os.path.exists(path):
 
                 error = "la ruta no existe"
                 self.filterAlert(path,error)
-
+            else:
                 if os.path.islink(path):
 
                     error = "la ruta es un enlace simbolico"    
                     self.filterAlert(path,error)
+                if os.path.isdir(path):
 
-                if os.path.basename(path)[0] == '.':
+                    p = path.split('/')
+
+                    for i in p[1:]:
+
+                        if i[0] == '.':
+                            error = 'la ruta esta oculta'
+                            self.filterAlert(path,error)
+                else:
+
+                    if os.path.basename(path)[0] == '.':
                     
-                    error = "la ruta esta oculta"
-                    self.filterAlert(path,error)
+                        error = "la ruta esta oculta"
+                        self.filterAlert(path,error)
 
         else:
 
@@ -146,6 +158,7 @@ class BraseroProject(Log):
                 uri = i.find('uri').text
             
                 path = path.encode('utf-8')
+                
 
                 uri = uri.replace('file%3A%2F%2F%2F','/')
                 uri = uri.replace('%2F','/')
@@ -153,12 +166,14 @@ class BraseroProject(Log):
 
                 uri = self.replaceLastPatch(uri,path)
 
+                path = os.path.basename(path)
+
                 self.objetives.append((path,uri))
 
                 self.onlyPath.append(path)
 
                 self.onlyUri.append(uri)
-            except:
+            except AttributeError:
                 self.badfiles.append((path,uri))
 
                 path = None
@@ -167,14 +182,22 @@ class BraseroProject(Log):
     def replaceLastPatch(self,uri,path):
         # TODO : revisar la existencia de la ruta producto de no existir someter
         # a un proceso de revision o registro de error
-        
-        sep = uri[0:10].encode('utf-8')
 
-        tuplesep = uri.partition(sep)
+        # este modulo se encarga de recoger el path y unirlo al uri para evitar
+        # tener que filtrar uno a uno los caracteres especiales
 
-        uri = tuplesep[0] + path
+        home = os.environ['HOME'] + '/'
+
+        firstdir = os.listdir(home)
+
+        for i in firstdir:
+            candidate = home + i + path
+            if os.path.exists(candidate):
+                
+                uri = candidate
 
         return uri
+
 
     def Check(self):
 
@@ -184,9 +207,13 @@ class BraseroProject(Log):
             print "Revise su archivo de LOG"
 
             for i in self.badfiles:
+                try:
+                    regerror = i[0] + " : " + i[1]
+                except Exception, e:
 
-                regerror = i[0] + " : " + i[1]
+                    raise(e)
 
+    
                 self.listerrors.append(regerror)
 
             self.MakeLog()
@@ -216,9 +243,35 @@ def main(argv):
 
         filterpath = Normalize(lst)
 
-        for i in brasero.onlyPath:
+    
+        for i in lst:
+            try:
+                filterpath.filter(i)
+            
+            except Exception,e:
 
-            filterpath.filter(i)
+                print "ocurrio un error en :" + i
+
+                regerror = "ocurrio un error en " + " : " + i + ' : ' + str(e) + '\n'
+
+                filterpath.listerrors.append(regerror)
+
+        for i in brasero.onlyPath:
+            try:
+
+                filterpath.filter(i,False)
+            except Exception,e:
+
+                print "ocurrio un error en :" + i
+
+                regerror = "ocurrio un error en " + " : " + i + ' : ' + str(e) + '\n'
+
+                filterpath.listerrors.append(regerror)
+
+
+
+
+
 
         filterpath.Exit()
 
