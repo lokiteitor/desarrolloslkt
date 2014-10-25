@@ -6,9 +6,6 @@ import xml.etree.ElementTree as ET
 
 import getopt
 
-import pdb
-
-
 class Log(object):
     """Administrador de errores"""
     def __init__(self):
@@ -51,7 +48,6 @@ class Normalize(Log):
         if lst:
             self.lst = lst
 
-
     def Check(self):
 
         if len(self.listerrors) > 0:
@@ -81,7 +77,6 @@ class Normalize(Log):
         # TODO : error al acceder a un elemento fuera de rango en la comprobacion
         # del directorio
 
-
         if isuri:
             if not os.path.exists(path):
 
@@ -92,6 +87,7 @@ class Normalize(Log):
 
                     error = "la ruta es un enlace simbolico"    
                     self.filterAlert(path,error)
+                    
                 if os.path.isdir(path):
 
                     p = path.split('/')
@@ -138,11 +134,9 @@ class BraseroProject(Log):
         self.onlyUri = []
         self.badfiles =[]
 
-
         self.iterPath()
 
         self.Check()
-
 
     def getGraft(self):
         
@@ -198,7 +192,6 @@ class BraseroProject(Log):
 
         return uri
 
-
     def Check(self):
 
         if len(self.badfiles) > 0:
@@ -212,7 +205,6 @@ class BraseroProject(Log):
                 except Exception, e:
 
                     raise(e)
-
     
                 self.listerrors.append(regerror)
 
@@ -267,11 +259,6 @@ def main(argv):
                 regerror = "ocurrio un error en " + " : " + i + ' : ' + str(e) + '\n'
 
                 filterpath.listerrors.append(regerror)
-
-
-
-
-
 
         filterpath.Exit()
 
