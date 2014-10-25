@@ -3,14 +3,52 @@ import sys
 import os
 import shutil
 import glob
+import datetime
 
 # sencillo script que permite la conversion por lotes de archivos .3gp a .mp3
 # haciendo uso de FFMPEG
 
+class Log(object):
+    """Administrador de errores"""
+    def __init__(self):
+
+        self.LOG = os.environ['HOME']+'/Documentos/mis_logs/normpath.log'
+
+        self.listerrors = []
+        self.Logmodule = self.__class__
+                
+    def MakeLog(self):
+
+        self.checkLog()
+
+        with open(self.LOG,'a') as filelog:
+
+            now = datetime.datetime.now().strftime('%d/%m/%Y'+'  %H:%M')
+
+            filelog.write('\n\n'+str(self.Logmodule)+'\n')
+            filelog.write(now+'\n')
+
+            for i in self.listerrors:
+
+                filelog.write(i+'\n')
+
+    def checkLog(self):
+        
+        if not os.path.exists(os.path.dirname(self.LOG)):
+
+            os.mkdir(os.path.dirname(self.LOG))
+
+
+# TODO : definir las constantes de directorios en base al archivo de 
+#        xdg user dirs
 
 SALIDA = os.environ['HOME']+'/convertidos/'
 LISTOS = os.environ['HOME']+'/listos/'
 LOG = os.environ['HOME']+'/mis_logs/music_conv.log'
+
+
+
+
 
 def main(path):
     os.chdir(path)
@@ -18,6 +56,7 @@ def main(path):
     
     lista = glob.glob('*.3gp') + glob.glob('*.mp4')
 
+    # TODO : adaptar a las constantes
     if not os.path.exists(os.environ['HOME']+'/Musica/convertidos/'):
         os.mkdir(os.environ['HOME']+'/Musica/convertidos')
 
