@@ -109,6 +109,9 @@ def main(path):
     log.close()
 
 
+
+
+
 def CheckError():
     log = open(LOG,'a')
     error = [[],[],[]]

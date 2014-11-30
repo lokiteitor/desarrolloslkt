@@ -8,6 +8,9 @@ import sys
 # y la carpeta musica del celular las cuales estan definidas en dirs funcion
 # main
 
+# TODO : adaptarlo a rutas en otros dispositivos
+
+
 def searching(path,log):
 
     for root, dirs, files in os.walk(path):
