@@ -5,9 +5,12 @@ import shutil
 import glob
 import datetime
 
+from LktUtility import xdg_api
+
 # sencillo script que permite la conversion por lotes de archivos .3gp a .mp3
 # haciendo uso de FFMPEG
 
+# TODO : Mover esta clase como modulo de LktUtility
 class Log(object):
     """Administrador de errores"""
     def __init__(self):
@@ -39,36 +42,76 @@ class Log(object):
             os.mkdir(os.path.dirname(self.LOG))
 
 
-# TODO : definir las constantes de directorios en base al archivo de 
-#        xdg user dirs
+###########################################################################
+# Codigo en Funcion
+X = xdg_api.XdgConfig()
 
-SALIDA = os.environ['HOME']+'/convertidos/'
-LISTOS = os.environ['HOME']+'/listos/'
+SALIDA = os.path.join(X.get("xdg_music_dir"),'/convertidos')
+LISTOS = os.path.join(X.get("xdg_videos_dir"),"/listos")
 LOG = os.environ['HOME']+'/mis_logs/music_conv.log'
 
-
-
+LOG = os.path.join(X.get("xdg_documents_dir"),"/mis_logs/music_conv.log")
 
 
 def main(path):
+    # crear un menu de entrada
+    Convert(path)
+    pass
+
+
+def CleanRepeat(original,other=SALIDA):
+    # limpiar los archivos repetidos basandose en la calidad para 
+    # eliminarlos
+
+    # dar por obvio que @original es el dispositivo de destino Final
+    #   TODO : Definir esto en una constante
+    # @other : es un directorio definido por el usuario y que por default es SALIDA
+
+    lista1 = os.listdir(original)
+    lista2 = os.listdir(other)
+
+    for i in lista1:
+
+        for x in lista2:
+
+            if i == x:
+                tami = os.path.getsize(os.path.join(original,i))
+                tamx = os.path.getsize(os.path.join(other,x))
+
+                if tami >= tamx and os.path.exists(os.path.join(other,x)):
+
+                    os.remove(os.path.join(other,x))
+
+                elif os.path.exists(os.path.join(original,i)):
+
+                    os.remove(os.path.join(original,i))
+
+                    shutil.move(os.path.join(other,x),os.path.join(original,x))
+                  
+
+def Convert(path):
+
     os.chdir(path)
 
     
     lista = glob.glob('*.3gp') + glob.glob('*.mp4')
 
-    # TODO : adaptar a las constantes
-    if not os.path.exists(os.environ['HOME']+'/Musica/convertidos/'):
-        os.mkdir(os.environ['HOME']+'/Musica/convertidos')
+    if not os.path.exists(SALIDA):
+        os.mkdir(SALIDA)
 
-    if not os.path.exists(os.environ['HOME']+'/Videos/listos/'):
-        os.mkdir(os.environ['HOME']+'/Videos/listos/')
+    if not os.path.exists(LISTOS):
+        os.mkdir(LISTOS)
 
-    if not os.path.exists(os.environ['HOME']+'/Documentos/mis_logs'):
-        os.mkdir(os.environ['HOME']+'/Documentos/mis_logs')
+    if not os.path.exists(LOG):
+        os.mkdir(LOG)
 
 
+    # TODO : adaptar a nuevo modulo de Log
 
     log = open(LOG,'a')
+
+
+
 
     for i in lista:
 
