@@ -1,5 +1,16 @@
 #!/usr/bin/env python2.7
 
+# estos son los directorios que pueden ser invocados utilizando este modulo
+
+# 'xdg_publicshare_dir'
+# 'xdg_download_dir' 
+# 'xdg_music_dir' 
+# 'xdg_videos_dir' 
+# 'xdg_desktop_dir' 
+# 'xdg_documents_dir' 
+# 'xdg_templates_dir' 
+# 'xdg_pictures_dir'
+
 import os
 import re
 import io
@@ -31,6 +42,8 @@ class XdgConfig(object):
         
         self.xdg_dirs = self.getAllDirectory()
 
+        self.mountpath = getMountDirectory()
+
     def getAllDirectory(self):
 
         DIRS = {}
@@ -49,3 +62,18 @@ class XdgConfig(object):
             response = ""
 
         return response
+
+
+
+def getMountDirectory():
+
+    dist = os.uname()[3]
+    user = os.environ['USER']
+
+    if dist.count('Ubuntu'):
+
+        mountpath = '/media/' + user
+    else:
+        mountpath = '/run/media/'+ user
+
+    return mountpath
