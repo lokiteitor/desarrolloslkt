@@ -3,63 +3,66 @@ import sys
 import os
 import shutil
 import glob
-import datetime
+import getopt
 
 from LktUtility import xdg_api
+from LktUtility import Log
 
 # sencillo script que permite la conversion por lotes de archivos .3gp a .mp3
 # haciendo uso de FFMPEG
 
-# TODO : Mover esta clase como modulo de LktUtility
-class Log(object):
-    """Administrador de errores"""
-    def __init__(self):
-
-        self.LOG = os.environ['HOME']+'/Documentos/mis_logs/normpath.log'
-
-        self.listerrors = []
-        self.Logmodule = self.__class__
-                
-    def MakeLog(self):
-
-        self.checkLog()
-
-        with open(self.LOG,'a') as filelog:
-
-            now = datetime.datetime.now().strftime('%d/%m/%Y'+'  %H:%M')
-
-            filelog.write('\n\n'+str(self.Logmodule)+'\n')
-            filelog.write(now+'\n')
-
-            for i in self.listerrors:
-
-                filelog.write(i+'\n')
-
-    def checkLog(self):
-        
-        if not os.path.exists(os.path.dirname(self.LOG)):
-
-            os.mkdir(os.path.dirname(self.LOG))
-
+# TODO : utilizar ordenamiento inteligente
 
 ###########################################################################
 # Codigo en Funcion
 X = xdg_api.XdgConfig()
+L = Log.Log('music_conv.log')
 
-SALIDA = os.path.join(X.get("xdg_music_dir"),'/convertidos')
-LISTOS = os.path.join(X.get("xdg_videos_dir"),"/listos")
-LOG = os.environ['HOME']+'/mis_logs/music_conv.log'
+SALIDA = os.path.join(X.get("xdg_music_dir"),'convertidos/')
+LISTOS = os.path.join(X.get("xdg_videos_dir"),"listos/")
+# TODO : definir mediante una constante el dispositivo externo en el que se
+#        almacena
 
-LOG = os.path.join(X.get("xdg_documents_dir"),"/mis_logs/music_conv.log")
+DISP = os.path.join(xdg_api.getMountDirectory,'LOKITEITOR/Musica/anime')
 
 
-def main(path):
+def main(argv):
     # crear un menu de entrada
-    Convert(path)
-    pass
+    # -C: --clean= : limpiar archivos repetidos -> CleanRepeat
+    #       @requiere un directorio sobre el que actuar
+    # -c:--convert= : convertir de video a audio -> Convert
+    #       @directorio donde se encuentran los videos
+
+    try:
+        options , arg = getopt.getopt(argv, "C:c:",["clean=:","convert="])
+    except getopt.GetoptError:
+        print "el argumento no es valido"
 
 
-def CleanRepeat(original,other=SALIDA):
+    for opt , arg in options:
+        if opt in ("-C" , "--clean"):
+            if arg:
+                CleanRepeat(other=arg)
+            else:
+                CleanRepeat()
+
+        if opt in ("-c" , "--convert"):
+            if arg:
+                Convert(arg)
+            else:
+                mens = 'Se requiere la ruta hacia los videos'
+                print mens
+
+                L.listerrors.append(mens)
+
+
+
+def CleanRepeat(original=DISP,other=SALIDA):
+
+    # TODO : funcion de momento inservible
+    # recorrer directorios
+
+
     # limpiar los archivos repetidos basandose en la calidad para 
     # eliminarlos
 
@@ -88,11 +91,9 @@ def CleanRepeat(original,other=SALIDA):
 
                     shutil.move(os.path.join(other,x),os.path.join(original,x))
                   
-
 def Convert(path):
 
     os.chdir(path)
-
     
     lista = glob.glob('*.3gp') + glob.glob('*.mp4')
 
@@ -101,17 +102,6 @@ def Convert(path):
 
     if not os.path.exists(LISTOS):
         os.mkdir(LISTOS)
-
-    if not os.path.exists(LOG):
-        os.mkdir(LOG)
-
-
-    # TODO : adaptar a nuevo modulo de Log
-
-    log = open(LOG,'a')
-
-
-
 
     for i in lista:
 
@@ -136,27 +126,19 @@ def Convert(path):
                         shutil.move(os.path.splitext(i)[0]+'.mp3',SALIDA)
                         shutil.move(i,LISTOS)
                     except:
-                        log.write('el archivo %s ya existe\n'%SALIDA)
+                        L.listerrors.append('el archivo %s ya existe\n'%SALIDA)
                         #TODO : remover el archivo duplicado
 
-
         else:
-            
 
-            log.write(i+'\n')
-            log.write(orden+'\n')
-            log.write(other_i+'\n')
-            log.write(out+'\n')
-            log.write('################################################'+'\n')
-
-    log.close()
-
-
-
+            L.listerrors.append(i+'\n')
+            L.listerrors.append(orden+'\n')
+            L.listerrors.append(other_i+'\n')
+            L.listerrors.append(out+'\n')
+            L.listerrors.append('################################################'+'\n')
 
 
 def CheckError():
-    log = open(LOG,'a')
     error = [[],[],[]]
     # [['error de tamano'],['error de conversion'],['faltantes']]
     neverconvert = os.listdir(os.getcwd())
@@ -182,28 +164,31 @@ def CheckError():
         if not new_i in now:
             error[2].append(new_i)
 
-    log.write('lista de errores\n')
-    log.write('error de tamano\n')
-    for x in error[0]:
-        log.write(x+'\n')
+    # Registrar los errores
 
-    log.write('error de conversion\n')
-    for x in error[1]:
-        for y in x:
-            log.write(y+'\n')
+    if len(error[0]):
+        L.listerrors.append('error de tamano\n')
 
-    log.write('faltantes\n')
-    for x in error[2]:
-        log.write(x+'\n')
+        for x in error[0]:
+            L.listerrors.append(x+'\n')
 
-    log.write('FIN\n')
+    if len(error[1]):
+        L.listerrors.append('error de conversion\n')
+        for x in error[1]:
+            for y in x:
+                L.listerrors.append(y+'\n')
+
+    if len(error[2]):
+        L.listerrors.append('faltantes\n')
+        for x in error[2]:
+            L.listerrors.append(x+'\n')
+
+    L.listerrors.append('FIN\n')
+
+    L.MakeLog()
     
-    log.close()
-
-
-
 
 if __name__ == '__main__':
-    main(sys.argv[1])
+    main(sys.argv[1:])
     CheckError()
 
