@@ -7,7 +7,6 @@ import re
 
 
 
-
 class Log(object):
     """Administrador de errores"""
     def __init__(self):
@@ -43,6 +42,9 @@ class PackTarball(object):
     def __init__(self, finalpath):
         self.finalpath = finalpath
 
+    def function(self):
+        pass
+
         
 def FilterUsb(listdir):
 
@@ -63,14 +65,24 @@ def FilterUsb(listdir):
     return excep
 
 
+def MakeBackup():
+    # hacer el backup desde rsync capturar los errores
+    pass
+
 ###########################################################################
 # codigo actualmente en funcionamiento
 
-def filterVersion(path):
+def filterVersion(path,repo):
     # filtrar los paquetes por version
     # retorna una diccionario que contiene todas las repeticiones
 
+    # por razones de eficiencia debe de: 
+    # @path : debe de ser el directorio con la menor cantidad de archivos
+    # @repo : debe de ser el directorio con la mayor cantidad de archivos
+
     lista = os.listdir(path)
+
+    listrepo = os.listdir(repo)
 
     matchlist = {}
 
@@ -89,7 +101,7 @@ def filterVersion(path):
 
         rest = []
 
-        for x in lista:
+        for x in listrepo:
 
             sub2 = pat.sub('',x)
 
@@ -131,8 +143,9 @@ def RemoveGarbage(dirname,pack):
                 os.remove(os.path.join(dirname,x))
             except Exception,e:
 
-                error = os.path.join(dirname,x) + '\t' + str(e) 
+                error = os.path.join(dirname,x) + '\t' + str(e)
                 Register.listerrors.append(error)
+
 
 
 ##############
@@ -147,7 +160,17 @@ def main():
     
     DIR = '/run/media/lokiteitor/lkt/pkg/'
 
-    listobjetive = filterVersion(DIR)
+    REPO = '/var/cache/pacman/pkg/'
+
+    ls1 = len(os.listdir(DIR))
+    ls2 = len(os.listdir(REPO))
+
+    if ls1 >= ls2:
+
+        listobjetive = filterVersion(DIR,REPO)
+    else:
+        listobjetive = filterVersion(REPO,DIR)
+
 
     RemoveGarbage(DIR,listobjetive)
 
