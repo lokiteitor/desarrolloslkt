@@ -9,9 +9,14 @@ X = xdg_api.XdgConfig()
 
 class Log(object):
     """Administrador de errores"""
-    def __init__(self,name):
+    def __init__(self,name,path=None):
 
-        self.LOG = os.path.join(X.get('xdg_documents_dir'),'mis_logs/'+name)
+        if path:
+            path = os.path.join(path,'mis_logs/'+name)
+        else:
+            path = os.path.join(X.get('xdg_documents_dir'),'mis_logs/'+name)           
+        
+        self.LOG = path
 
         self.listerrors = []
         self.Logmodule = self.__class__
@@ -30,7 +35,11 @@ class Log(object):
 
             for i in self.listerrors:
 
-                filelog.write(i+'\n')
+                # TODO : agregar metodo capaz de agregar eventos a la pila de
+                #       eventos y manejar eventualidades como errores de tipo 
+                #       e iteracion de listas
+
+                filelog.write(str(i)+'\n')
 
     def checkLog(self):
         

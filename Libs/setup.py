@@ -7,7 +7,7 @@ setup(
     , download_url='http://www.desarrolloslkt.tk/descargas'
     , author='David Delgado'
     , author_email='lokiteitor513@gmail.com'
-    , version='0.25a' # remember to change me for new versions!
+    , version='0.26a' # remember to change me for new versions!
     , description='Multitud de librerias personalizadas para realizar funciones comunes'
     , long_description=open('README.txt').read()
     , license='GPL'

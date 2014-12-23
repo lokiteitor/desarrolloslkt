@@ -70,6 +70,14 @@ def CleanRepeat(original=DISP,other=SALIDA):
     #   TODO : Definir esto en una constante
     # @other : es un directorio definido por el usuario y que por default es SALIDA
 
+    for root, dirs, files in os.walk(original, topdown=False):
+
+        for dirs in i:
+
+            
+
+
+
     lista1 = os.listdir(original)
     lista2 = os.listdir(other)
 

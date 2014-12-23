@@ -49,11 +49,11 @@ def getProbability(pathsplit):
 
             pathsplit.pop(index)
 
-    
+
 
     print pathsplit
 
-
+#
 
 
 for i in os.listdir(FILES):
