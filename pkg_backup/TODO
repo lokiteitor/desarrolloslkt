@@ -1,0 +1,96 @@
+## pasos para hacer la instalacion
+
+1 conectarse a la red
+2 particionar formatear y montar particiones
+3 instalar paquetes base , linux-lts
+3.1 pasar cache de memoria hacia cache de objetivo
+4 generar fstab y hacer chroot
+
+## solo hasta aqui se dispone de un interprete python
+
+1 instalar python
+2 si linux esta instalado no hacer nada si no instalarlo desde el repo local
+3 configurar idioma
+4 configurar zona horaria
+5 configurar nombre de maquina
+6 instalar para red
+	iw wpa_supplicant wpa_actiond dialog
+
+7 establecer contrasena
+8 instalar grub
+	grub os-prober
+9 desmontar y reiniciar
+
+## aqui termina la parte desde el livecd
+
+## empieza la parte en el sistema recien instalado
+
+1 agregar usuario
+2 conectarse a la red y activarla en cada reinicio
+3 instalar xorg servidor grafico
+	xorg-server xorg-xinit
+4 instalar controladores graficos la eleccion de cual debe ser especificada
+	xf86-video-vesa xf86-video-intel 
+5 instalar el DE especificado
+	xfce4 xfce4-goodies 
+6 configurar xinit
+7 desmutear audio
+	alsa-utils
+8 instalar fuentes
+	ttf-dejavu
+9 instalar directorios xdg y configurarlos
+	xdg-user-dirs
+10 instalar plugins
+	ffmpeg	gst-libav gst-plugins-bad gst-plugins-base gst-plugins-good
+	gst-plugins-ugly gst-vaapi gst-plugin-libde265-git libde265
+	
+
+	gstreamer0.10-bad-plugins gstreamer0.10-base-plugins
+	gstreamer0.10-ffmpeg gstreamer0.10-good-plugins
+	gstreamer0.10-good-plugins-slim gstreamer0.10-ugly-plugins
+	gstreamer0.10-vaapi gstreamer0.10-plugin-libde265-git
+
+11 instalar libreoffice
+	libreoffice
+12 instalar java 
+	icedtea-web-java7
+	jre7-openjdk
+	jdk7-openjdk
+13 instalar openssh
+	openssh
+14 utiliria diversa
+	unrar htop evince gvfs leafpad brasero
+	unzip rsync file-roller dosfstools
+
+15 instalar look
+16 instalar impresora
+	cups ghostscript gsfonts gutenprint
+17 instalar escaner
+	sane xsane
+## estos paquetes se encuentran en los repos de AUR
+1 instalar yaourt
+	 [archlinuxfr]
+	 SigLevel = Never
+	 Server = http://repo.archlinux.fr/$arch
+	
+	yaourt
+
+2 instalar paquetes de AUR
+	dropbox
+	thunar-dropbox
+
+## a partir son elecciones personales
+
+1 opcional: instalar pulseaudio
+	pulseaudio pavucontrol pulseaudio-alsa
+2 instalar navegador
+	chromium
+3 instalar y configurar git
+	git meld
+4 instalar terminales
+	guake terminator
+5 instalar moc y configurar
+	moc
+6 configurar alias
+
+7 instalar sublime text
