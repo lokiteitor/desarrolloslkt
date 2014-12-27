@@ -43,27 +43,64 @@ def getProbability(pathsplit):
     # recibe una lista con la cadena divida
 
     for i in pathsplit:
-        if i == '':
+        if len(i) == 0:
 
             index = pathsplit.index(i)
 
             pathsplit.pop(index)
+            
+        
+    tam = len(pathsplit)
+
+    porc = 100/tam
+
+    minimo = 50 / porc
+
+    minimo += 1
+
+    minpath = " ".join(pathsplit[:minimo])
+
+
+    return (minpath,tam ,porc,minimo)
+
+
+def getAllFiles(path):
+    index = {}
+    for i in os.listdir(path):
+
+        filename = " ".join(getPrimaryPattern(i))
+
+        index[filename] = getProbability(i)
+
+    return index
 
 
 
-    print pathsplit
-
-#
+files = getAllFiles(FILES)
 
 
-for i in os.listdir(FILES):
+commonfiles = []
+
+for i in os.listdir(DIRS):
 
     r = getPrimaryPattern(i)
 
-    # getProbability(r)
+    porcion = getProbability(r)
+    if len(porcion[0]) >= 4:
+        print porcion[0]
+        common = re.compile(porcion[0],re.IGNORECASE)
+    else:
+        continue
+    for x in files.keys():
 
+        if common.search(x):
+            commonfiles.append( x + '\n\t' + i)
+        
     L.listerrors.append(r) 
-    L.listerrors.append(i+'\n')
+    L.listerrors.append(i)
+    L.listerrors.append(str(porcion)+'\n')
+for i in commonfiles:
+    L.listerrors.append(i)
 
 L.MakeLog()
 
