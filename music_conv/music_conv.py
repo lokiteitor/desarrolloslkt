@@ -4,6 +4,7 @@ import os
 import shutil
 import glob
 import getopt
+import re
 
 from LktUtility import xdg_api
 from LktUtility import Log
@@ -18,12 +19,16 @@ from LktUtility import Log
 X = xdg_api.XdgConfig()
 L = Log.Log('music_conv.log')
 
-SALIDA = os.path.join(X.get("xdg_music_dir"),'convertidos/')
-LISTOS = os.path.join(X.get("xdg_videos_dir"),"listos/")
-# TODO : definir mediante una constante el dispositivo externo en el que se
-#        almacena
+# SALIDA = os.path.join(X.get("xdg_music_dir"),'convertidos/')
+# LISTOS = os.path.join(X.get("xdg_videos_dir"),"listos/")
+# DISP = os.path.join(xdg_api.getMountDirectory,'LOKITEITOR/Musica/anime')
+# debug constantes
+DISP = '/home/lokiteitor/Laboratorio/anime'
+SALIDA = '/home/lokiteitor/Laboratorio/opend'
+LISTOS = '/home/lokiteitor/Laboratorio/listos'
 
-DISP = os.path.join(xdg_api.getMountDirectory,'LOKITEITOR/Musica/anime')
+
+
 
 
 def main(argv):
@@ -34,10 +39,9 @@ def main(argv):
     #       @directorio donde se encuentran los videos
 
     try:
-        options , arg = getopt.getopt(argv, "C:c:",["clean=:","convert="])
+        options , arg = getopt.getopt(argv, "Cc:",["clean=:","convert="])
     except getopt.GetoptError:
         print "el argumento no es valido"
-
 
     for opt , arg in options:
         if opt in ("-C" , "--clean"):
@@ -67,37 +71,112 @@ def CleanRepeat(original=DISP,other=SALIDA):
     # eliminarlos
 
     # dar por obvio que @original es el dispositivo de destino Final
-    #   TODO : Definir esto en una constante
     # @other : es un directorio definido por el usuario y que por default es SALIDA
+    files = getAllFiles(other)
 
-    for root, dirs, files in os.walk(original, topdown=False):
+    commonfiles = []
+    filesok = []
+    nofiles = []
 
-        for dirs in i:
+    for i in os.listdir(original):
+        # listar los directorios que seran evaluados 
+        # sobre los archivos debido a que estos contiene una definicion mas 
+        # clara
 
+        r = getPrimaryPattern(i)
+
+        porcion = getProbability(r)
+
+        # ignorar palabras de longitud menor a 4
+        if len(porcion) >= 4:
+            common = re.compile(porcion,re.IGNORECASE)
+        else:
+            continue
+
+
+        for x in files.keys():
+            # compilar un patron y analizar
+
+            if common.search(x):
+                commonfiles.append((files[x][1],i))
+                filesok.append(x)
             
+    for i in commonfiles:
+        L.listerrors.append(i)
+
+    # testear que archivos no coincidieron con algun directorio
+
+    for i in files.keys():
+        if filesok.count(i):
+            continue
+        else:
+            nofiles.append(i)
+
+    L.listerrors.append('\n\n')
+    for i in nofiles:
+        L.listerrors.append(i)
 
 
 
-    lista1 = os.listdir(original)
-    lista2 = os.listdir(other)
 
-    for i in lista1:
+##########################funciones de filtraje############################
 
-        for x in lista2:
+def getPrimaryPattern(name):
+    # obtener cuanto vale cada letra dentro del patron
+    # extraer caracteres no alfabeticos
+    # extraer la extencion del archivo
 
-            if i == x:
-                tami = os.path.getsize(os.path.join(original,i))
-                tamx = os.path.getsize(os.path.join(other,x))
+    R = re.compile('[^a-z ]',re.IGNORECASE)
 
-                if tami >= tamx and os.path.exists(os.path.join(other,x)):
+    name = name.replace(os.path.splitext(name)[1],'')
+    name = name.replace('-',' ')
+    name = name.replace('~',' ')
 
-                    os.remove(os.path.join(other,x))
+    name = R.sub('',name)
 
-                elif os.path.exists(os.path.join(original,i)):
+    res = name.split(' ')
 
-                    os.remove(os.path.join(original,i))
+    return res
 
-                    shutil.move(os.path.join(other,x),os.path.join(original,x))
+
+def getProbability(pathsplit):
+
+    # recibe una lista con la cadena divida
+
+    for i in pathsplit:
+        if len(i) == 0:
+
+            index = pathsplit.index(i)
+
+            pathsplit.pop(index)
+
+    # Obtiene el porcentaje de valor para la frase
+    # ademas de obtener el minimo de palabras suficientes para validar(50%)
+    # obtiene la cadena minima
+    tam = len(pathsplit)
+
+    porc = 100/tam
+
+    minimo = 50 / porc
+
+    minimo += 1
+
+    minpath = " ".join(pathsplit[:minimo])
+
+
+    return minpath
+
+
+def getAllFiles(path):
+    # precarga todas las direcciones a evaluar
+
+    index = {}
+    for i in os.listdir(path):
+        filename = " ".join(getPrimaryPattern(i))
+
+        index[filename] = (getProbability(i),i)
+
+    return index
                   
 def Convert(path):
 
@@ -199,4 +278,3 @@ def CheckError():
 if __name__ == '__main__':
     main(sys.argv[1:])
     CheckError()
-
