@@ -27,10 +27,6 @@ DISP = '/home/lokiteitor/Laboratorio/anime'
 SALIDA = '/home/lokiteitor/Laboratorio/opend'
 LISTOS = '/home/lokiteitor/Laboratorio/listos'
 
-
-
-
-
 def main(argv):
     # crear un menu de entrada
     # -C: --clean= : limpiar archivos repetidos -> CleanRepeat
@@ -102,7 +98,9 @@ def CleanRepeat(original=DISP,other=SALIDA):
                 filesok.append(x)
             
     for i in commonfiles:
-        L.listerrors.append(i)
+        # devolver los resultados y realizar limpieza
+
+        CleanFile(os.path.join(other,i[0]),os.path.join(original,i[1]))
 
     # testear que archivos no coincidieron con algun directorio
 
@@ -116,7 +114,41 @@ def CleanRepeat(original=DISP,other=SALIDA):
     for i in nofiles:
         L.listerrors.append(i)
 
+    print "limpieza Finalizada"
 
+    L.MakeLog()
+
+
+
+############################Funciones de limpieza############################
+def CleanFile(path,dirpath):
+
+    filenameother = os.path.basename(path)
+    # print filenameother
+    R = re.compile('_low')
+
+    deletecandidate = []
+    movecandidate = []
+    error = []
+
+
+    for i in os.listdir(dirpath):
+        name = R.sub('',os.path.splitext(i)[0])
+
+
+
+        if name == os.path.splitext(filenameother)[0]:
+            if i.count('_low'):
+                deletecandidate.append(i)
+                movecandidate.append((dirpath,path))
+
+            elif os.path.getsize(os.path.join(dirpath,i)) >= os.path.getsize(path):
+                deletecandidate.append(i)
+                movecandidate.append((dirpath,path))
+            else:
+                error.append(i)
+
+    return deletecandidate,movecandidate,error
 
 
 ##########################funciones de filtraje############################
@@ -177,7 +209,10 @@ def getAllFiles(path):
         index[filename] = (getProbability(i),i)
 
     return index
-                  
+##########################terminan funciones de filtraje######################
+
+# TODO : implentar funcion para guardar y restaurar datos en xml
+
 def Convert(path):
 
     os.chdir(path)
