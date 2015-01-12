@@ -49,7 +49,9 @@ def getProbability(pathsplit):
 
             pathsplit.pop(index)
             
-        
+    # Obtiene el porcentaje de valor para la frase
+    # ademas de obtener el minimo de palabras suficientes para validar(50%)
+    # obtiene la cadena minima
     tam = len(pathsplit)
 
     porc = 100/tam
@@ -61,52 +63,71 @@ def getProbability(pathsplit):
     minpath = " ".join(pathsplit[:minimo])
 
 
-    return (minpath,tam ,porc,minimo)
+    return minpath
 
 
 def getAllFiles(path):
+    # precarga todas las direcciones a evaluar
+
     index = {}
     for i in os.listdir(path):
-
         filename = " ".join(getPrimaryPattern(i))
 
         index[filename] = getProbability(i)
 
     return index
 
+def main():
+    files = getAllFiles(FILES)
+
+    commonfiles = []
+    filesok = []
+    nofiles = []
+
+    for i in os.listdir(DIRS):
+        # listar los directorios que seran evaluados 
+        # sobre los archivos debido a que estos contiene una definicion mas 
+        # clara
+
+        r = getPrimaryPattern(i)
+
+        porcion = getProbability(r)
+
+        # ignorar palabras de longitud menor a 4
+        if len(porcion) >= 4:
+            common = re.compile(porcion,re.IGNORECASE)
+        else:
+            continue
 
 
-files = getAllFiles(FILES)
+        for x in files.keys():
+            # compilar un patron y analizar
+
+            if common.search(x):
+                commonfiles.append( x + '\n\t' + i)
+                filesok.append(x)
+            
+        L.listerrors.append(r) 
+        L.listerrors.append(i)
+        L.listerrors.append(porcion+'\n')
 
 
-commonfiles = []
+    for i in commonfiles:
+        L.listerrors.append(i)
 
-for i in os.listdir(DIRS):
+    # testear que archivos no coincidieron con algun directorio
 
-    r = getPrimaryPattern(i)
+    for i in files.keys():
+        if filesok.count(i):
+            continue
+        else:
+            nofiles.append(i)
 
-    porcion = getProbability(r)
-    if len(porcion[0]) >= 4:
-        print porcion[0]
-        common = re.compile(porcion[0],re.IGNORECASE)
-    else:
-        continue
-    for x in files.keys():
-
-        if common.search(x):
-            commonfiles.append( x + '\n\t' + i)
-        
-    L.listerrors.append(r) 
-    L.listerrors.append(i)
-    L.listerrors.append(str(porcion)+'\n')
-for i in commonfiles:
-    L.listerrors.append(i)
-
-L.MakeLog()
+    L.listerrors.append('\n\n')
+    for i in nofiles:
+        L.listerrors.append(i)
 
 
-
-
-
-
-
+if __name__ == '__main__':
+    main()
+    L.MakeLog()
