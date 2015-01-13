@@ -17,15 +17,20 @@ from LktUtility import Log
 ###########################################################################
 # Codigo en Funcion
 X = xdg_api.XdgConfig()
-L = Log.Log('music_conv.log')
+L = Log.Log('music_conv')
 
-# SALIDA = os.path.join(X.get("xdg_music_dir"),'convertidos/')
-# LISTOS = os.path.join(X.get("xdg_videos_dir"),"listos/")
-# DISP = os.path.join(xdg_api.getMountDirectory,'LOKITEITOR/Musica/anime')
+# lista de seguimiento de archivos modificados
+
+seglist = []
+
+
+SALIDA = os.path.join(X.get("xdg_music_dir"),'convertidos/')
+LISTOS = os.path.join(X.get("xdg_videos_dir"),"listos/")
+DISP = os.path.join(xdg_api.getMountDirectory(),'LOKITEITOR/Musica/anime')
 # debug constantes
-DISP = '/home/lokiteitor/Laboratorio/anime'
-SALIDA = '/home/lokiteitor/Laboratorio/opend'
-LISTOS = '/home/lokiteitor/Laboratorio/listos'
+# DISP = '/home/lokiteitor/Laboratorio/anime'
+# SALIDA = '/home/lokiteitor/Laboratorio/opend'
+# LISTOS = '/home/lokiteitor/Laboratorio/listos'
 
 def main(argv):
     # crear un menu de entrada
@@ -58,11 +63,6 @@ def main(argv):
 
 
 def CleanRepeat(original=DISP,other=SALIDA):
-
-    # TODO : funcion de momento inservible
-    # recorrer directorios
-
-
     # limpiar los archivos repetidos basandose en la calidad para 
     # eliminarlos
 
@@ -73,6 +73,8 @@ def CleanRepeat(original=DISP,other=SALIDA):
     commonfiles = []
     filesok = []
     nofiles = []
+
+
 
     for i in os.listdir(original):
         # listar los directorios que seran evaluados 
@@ -99,9 +101,13 @@ def CleanRepeat(original=DISP,other=SALIDA):
             
     for i in commonfiles:
         # devolver los resultados y realizar limpieza
+        # deletecandidate,movecandidate,error
+        # archivo a borrar, a mover y error presentado
 
-        CleanFile(os.path.join(other,i[0]),os.path.join(original,i[1]))
+        Selectfile(os.path.join(other,i[0]),os.path.join(original,i[1]))
 
+    G = GarbageCollector(seglist)
+    G.InfoLog()
     # testear que archivos no coincidieron con algun directorio
 
     for i in files.keys():
@@ -120,19 +126,85 @@ def CleanRepeat(original=DISP,other=SALIDA):
 
     L.MakeLog()
 
+    return
+
+############################Recolector de basura##############################
+# realiza todas las funciones de limpieza
+class GarbageCollector(object):
+    """Realiza las funciones de limpieza en base a un diccionario que indica 
+       los elementos a vaciar, eliminar, mover, o renombrar"""
+    def __init__(self, tasklist):
+        super(GarbageCollector, self).__init__()
+        # resive una lista con diccionarios que posteriormente desempaquetara
+        self.tasklist = tasklist
+        # archivos que no existen
+        self.inexist = [] 
+        # archivos elimindados
+        self.deletefiles = []
 
 
+        for i in tasklist:
+            self.RouteTask(i)
+
+        for i in self.inexist:
+            L.add(i)
+
+    def RouteTask(self,task):
+        # estas son las tareas que es  capaz de routear
+        # delete : eliminar un archivo
+        # move : mover un archivo
+        # error : imprimir en el log los errores empaquetados
+
+        # estos son los parametros que comprueba
+        # name : nombre del archivo principal
+        # deletecandidate : nombre del archivo a borrar path absoluto
+        # movecandidate : nombre del archivo a mover path absoluto
+        # dirmovecandidate : nombre del directorio al que se movera el archivo 
+        # error : lista de errores que se deben de imprimir
+        
+        if task.has_key('tasks'):
+
+            if 'delete' in task['tasks']:
+
+                self.deleteTask(task['deletecandidate'])
+
+            if 'move' in task['tasks']:
+
+                self.moveTask(task['movecandidate'],task['dirmovecandidate'])
+
+    def deleteTask(self,path):
+        if os.path.exists(path):
+            self.deletefiles.append(os.path.basename(path))
+            os.remove(path)
+        else:
+            self.inexist.append(path)
+
+    def moveTask(self,origin,dest):
+        if os.path.exists(origin):
+
+            shutil.move(origin,dest)
+        else:
+            self.inexist.append(dest)
+
+    def errorTask(self,error):
+
+        L.add(error)
+        L.space()
+
+    def InfoLog(self):
+        if len(self.deletefiles) > 0:
+            L.add(False,'los siguientes archivos han sido elimindados\n')
+            L.add(True,self.deletefiles)
+
+        L.MakeLog()
 ############################Funciones de limpieza############################
-def CleanFile(path,dirpath):
+def Selectfile(path,dirpath):
+
+
 
     filenameother = os.path.basename(path)
     # print filenameother
     R = re.compile('_low')
-
-    deletecandidate = []
-    movecandidate = []
-    error = []
-
 
     for i in os.listdir(dirpath):
         name = R.sub('',os.path.splitext(i)[0])
@@ -140,17 +212,46 @@ def CleanFile(path,dirpath):
 
 
         if name == os.path.splitext(filenameother)[0]:
+            # revisa dos posibilidades en caso de no coincidir ninguna no hace 
+            # nada
             if i.count('_low'):
-                deletecandidate.append(i)
-                movecandidate.append((dirpath,path))
+                deletecandidate = os.path.join(dirpath,i)
+                movecandidate = path
+                dirmovecandidate = dirpath
 
             elif os.path.getsize(os.path.join(dirpath,i)) >= os.path.getsize(path):
-                deletecandidate.append(i)
-                movecandidate.append((dirpath,path))
+                deletecandidate = os.path.join(dirpath,i)
+                movecandidate = path
+                dirmovecandidate = dirpath
             else:
-                error.append(i)
+                error = i
+                deletecandidate = movecandidate = dirmovecandidate =''
 
-    return deletecandidate,movecandidate,error
+            error = '' if (deletecandidate != '') else error
+
+            if error != '':
+                print "se encontro un error en ",filenameother
+                print "\t\t",error
+
+            # estructura sobre la que se informan los seguimientos
+            # agregar la structura a una lista para posteriormente registrarla
+            # en el Log
+
+            bitacora = {
+            'name' : filenameother,
+            'deletecandidate' : deletecandidate,
+            'movecandidate' : movecandidate,
+            'dirmovecandidate' : dirmovecandidate,
+            'error' :  error,
+            'tasks' : ('delete','move','error')
+            }
+
+            seglist.append(bitacora)
+
+
+
+    # pasar a funciones de limpieza
+
 
 
 ##########################funciones de filtraje############################
@@ -315,3 +416,7 @@ def CheckError():
 if __name__ == '__main__':
     main(sys.argv[1:])
     CheckError()
+
+
+
+

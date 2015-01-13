@@ -72,8 +72,8 @@ def getMountDirectory():
 
     if dist.count('Ubuntu'):
 
-        mountpath = '/media/' + user
+        mountpath = os.path.join('/media', user)
     else:
-        mountpath = '/run/media/'+ user
+        mountpath = os.path.join('/run/media/', user)
 
     return mountpath

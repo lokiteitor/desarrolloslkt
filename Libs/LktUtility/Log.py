@@ -21,6 +21,7 @@ class Log(object):
         self.LOG = path
 
         self.listerrors = []
+        self.backup = []
         self.Logmodule = self.__class__
                 
     def MakeLog(self):
@@ -38,6 +39,12 @@ class Log(object):
             for i in self.listerrors:
 
                 filelog.write(str(i)+'\n')
+
+        # vaciar la pila y hacer un respaldo
+        for i in self.listerrors:
+            self.backup.append(i)
+
+        self.listerrors = []
 
     def checkLog(self):
         
@@ -74,7 +81,7 @@ class Log(object):
 
                 self.listerrors.append(str(i))
 
-    def space(self,num):
+    def space(self,num=1):
         for x in xrange(1,num):
             self.listerrors.append('\n')
 
