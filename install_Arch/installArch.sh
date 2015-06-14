@@ -8,4 +8,4 @@ genfstab -U -p /mnt >> /mnt/etc/fstab
 
 cp inchroot.sh /mnt/root
 
-arch-chroot /mnt /mnt/root/inchroot.sh
+#arch-chroot /mnt /mnt/root/inchroot.sh

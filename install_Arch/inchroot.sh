@@ -1,12 +1,14 @@
 #/bin/bash
 
+
+# configuramos el lenguaje
 echo "es_MX.UTF-8 UTF-8" >> /etc/locale.gen
 
 locale-gen
 
-echo "LANG=en_US.UTF-8 > /etc/locale.conf"
+echo "LANG=es_MX.UTF-8 > /etc/locale.conf"
 
-export LANG=en_US.UTF-8
+export LANG=es_MX.UTF-8
 
 ln -s /usr/share/zoneinfo/America/Mexico_City /etc/localtime
 
@@ -15,8 +17,8 @@ hwclock --systohc --utc
 echo "lokiteitor" > /etc/hostname
 
 
-mkdir /root/base
-mount /dev/sdb1 /root/base
+#mkdir /root/base
+#mount /dev/sdb1 /root/base
 
 pacman -S iw wpa_supplicant dialog wpa_actiond --noconfirm
 
@@ -38,7 +40,7 @@ sed -i "51,55d" /home/lokiteitor/.xinitrc
 
 pacman -S xfce4 xfce4-goodies --noconfirm
 
-pacman -Rsn xfburn mousepad xfburn ristretto --
+pacman -Rsn xfburn mousepad xfburn ristretto --noconfirm
 
 echo "exec startxfce4" >> /home/lokiteitor/.xinitrc
 
@@ -72,21 +74,4 @@ pacman -S chromium --noconfirm
 pacman -S git meld terminator moc --noconfirm
 
 pacman -S libreoffice --noconfirm
-
-
-
-
-
-echo "[archlinuxfr]" >> /etc/pacman.conf
-echo "SigLevel = Never" >> /etc/pacman.conf
-echo "Server = http://repo.archlinux.fr/$arch" >> /etc/pacman.conf
-
-pacman -Syu
-
-pacman -S yaourt --noconfirm
-
-
-
-
-
 
