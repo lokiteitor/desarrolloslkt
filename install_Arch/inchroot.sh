@@ -10,11 +10,15 @@ echo "LANG=es_MX.UTF-8 > /etc/locale.conf"
 
 export LANG=es_MX.UTF-8
 
+echo "KEYMAP=es" > /etc/vconsole.conf
+
 ln -s /usr/share/zoneinfo/America/Mexico_City /etc/localtime
 
 hwclock --systohc --utc
 
 echo "lokiteitor" > /etc/hostname
+
+#configurar /etc/hosts
 
 
 #mkdir /root/base

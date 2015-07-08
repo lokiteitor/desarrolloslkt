@@ -1,6 +1,7 @@
 #/bin/bash
 
 
+#realizar el chroot manualmente
 
 pacstrap /mnt base base-devel
 
