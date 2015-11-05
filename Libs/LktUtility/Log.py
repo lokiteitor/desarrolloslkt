@@ -52,9 +52,16 @@ class Log(object):
 
             os.mkdir(os.path.dirname(self.LOG))
 
+    def add(self,mensaje):
+        if str(type(mensaje)) == "<type 'str'":
+            self.listerrors.append(mensaje)
+
+        else:
+            raise TypeError
+
     # TODO : funcion que recorra un iterador recursivamente
 
-    def add(self,iterar=False,*argvc):
+    def additem(self,iterar=False,*argvc):
         # agregar eventos a la pila de eventos independientemente del tipo de
         # dato y maneja los iterables
 

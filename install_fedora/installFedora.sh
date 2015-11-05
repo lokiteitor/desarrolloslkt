@@ -1,23 +1,6 @@
 #!/bin/bash
 
 
-# configuraciones previas
-
-exec /run/media/Archivos/Install/Oxygen/install.sh
-
-dnf -y install curl wget
-
-dnf -y install --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
-
-
-# configuracion de repositorios
-cd /etc/yum.repos.d/
-
-wget http://download.virtualbox.org/virtualbox/rpm/fedora/virtualbox.repo
-
-usermod -a -G vboxusers lokiteitor
-
-
 # paquetes basicos
 
 dnf -y install kernel-headers
@@ -39,13 +22,14 @@ dnf -y install icedtea-web
 dnf -y install evince
 dnf -y install blueman
 dnf -y install gnome-tweak-tool
+dnf -y install brasero
 
 
 # Paquetes basicos
 dnf -y install terminator
 dnf -y install vim
 dnf -y install git
-
+dnf -y install htop
 
 # paquetes multimedia
 
@@ -60,7 +44,9 @@ dnf -y remove evolution
 
 # paquetes de virtualizacion
 dnf -y install binutils gcc make patch libgomp glibc-headers glibc-devel kernel-headers kernel-devel dkms
-dnf -y install VirtualBox-4.3
+dnf -y install VirtualBox-5.0
+
+usermod -a -G vboxusers lokiteitor
 
 service vboxdrv setup
 
@@ -92,15 +78,9 @@ mv /boot/initramfs-$(uname -r).img /boot/initramfs-$(uname -r)-nouveau.img
 dracut /boot/initramfs-$(uname -r).img $(uname -r)
 
 
-# Instalacion de paquetes externos
-dnf -y install /run/media/Archivos/Install/nautilus-dropbox-2015.02.12-1.fedora.x86_64.rpm
-dnf -y install /run/media/Archivos/Install/google-chrome-stable_current_x86_64.rpm
-dnf -y install /run/media/Archivos/Install/variety-0.5.3-1.fc22.noarch.rpm
-
-
 # Mover los .desktop de Sublime y Firefox
 
-exec gitconfig.sh
+#exec gitconfig.sh
 
 
 

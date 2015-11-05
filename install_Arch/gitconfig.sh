@@ -6,5 +6,6 @@ mkdir $HOME/git
 cd $HOME/git
 git clone https://github.com/lokiteitor/desarrolloslkt.git
 git clone https://github.com/lokiteitor/ejemcod.git
+https://github.com/lokiteitor/experiments.git
 git clone https://lokiteitor@bitbucket.org/lokiteitor/vantec.git
 

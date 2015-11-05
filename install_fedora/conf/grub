@@ -9,4 +9,3 @@ GRUB_GFXPAYLOAD_LINUX="keep"
 GRUB_VIDEO_BACKEND="vbe"
 GRUB_FONT_PATH="/boot/grub2/fonts/unicode.pf2"
 GRUB_GFXMODE=1600x900
-

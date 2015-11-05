@@ -5,6 +5,8 @@ import shutil
 import glob
 import getopt
 import re
+from ConfigParse import ConfigParse
+
 
 from LktUtility import xdg_api
 from LktUtility import Log
@@ -12,11 +14,10 @@ from LktUtility import Log
 # sencillo script que permite la conversion por lotes de archivos .3gp a .mp3
 # haciendo uso de FFMPEG
 
+# TODO : utilizar ordenamiento inteligente
 
 ###########################################################################
 # Codigo en Funcion
-# Permiten hacer uso de los directorios predeterminados de xdg
-# Permite hacer un registro de los errores en un archivo log
 X = xdg_api.XdgConfig()
 L = Log.Log('music_conv')
 
@@ -26,12 +27,11 @@ seglist = []
 
 
 
-# TODO: esto debe de ir en un archivo de configuracion externo
+config = ConfigParse("dirs.conf")
 
-SALIDA = os.path.join(X.get("xdg_music_dir"),'convertidos/')
-LISTOS = os.path.join(X.get("xdg_videos_dir"),"listos/")
-DISP = os.path.join(xdg_api.getMountDirectory(),'LOKITEITOR/Musica/anime')
-
+SALIDA = config.get("DIRS","salida")
+LISTOS = config.set("DIRS","terminados")
+DISP = config.set("DIRS","entrada_default")
 
 def main(argv):
     # crear un menu de entrada
@@ -59,7 +59,7 @@ def main(argv):
                 mens = 'Se requiere la ruta hacia los videos'
                 print mens
 
-                L.listerrors.append(mens)
+                L.add(mens)
 
 
 
@@ -83,7 +83,6 @@ def CleanRepeat(original=DISP,other=SALIDA):
         # clara
 
         r = getPrimaryPattern(i)
-
         porcion = getProbability(r)
 
         # ignorar palabras de longitud menor a 4
@@ -91,7 +90,6 @@ def CleanRepeat(original=DISP,other=SALIDA):
             common = re.compile(porcion,re.IGNORECASE)
         else:
             continue
-
 
         for x in files.keys():
             # compilar un patron y analizar
@@ -201,10 +199,8 @@ class GarbageCollector(object):
 ############################Funciones de limpieza############################
 def Selectfile(path,dirpath):
 
-
-
     filenameother = os.path.basename(path)
-    # print filenameother
+
     R = re.compile('_low')
 
     for i in os.listdir(dirpath):
@@ -290,18 +286,12 @@ def getProbability(pathsplit):
     # ademas de obtener el minimo de palabras suficientes para validar(50%)
     # obtiene la cadena minima
     tam = len(pathsplit)
-
     porc = 100/tam
-
     minimo = 50 / porc
-
     minimo += 1
-
     minpath = " ".join(pathsplit[:minimo])
 
-
     return minpath
-
 
 def getAllFiles(path):
     # precarga todas las direcciones a evaluar
@@ -333,16 +323,18 @@ def Convert(path):
 
         if os.path.getsize(i) >= 1000:
 
-            other_i = i.replace(' ','\\ ')
-            other_i = other_i.replace('(','\\(')
-            other_i = other_i.replace(')','\\)')
-            other_i = other_i.replace('&','\\&')
-            other_i = other_i.replace('\'','\\\'')
-            other_i = other_i.replace('`','\\`')
+            remplaza = [' ','(',')','&','\'','`']
+            remplazo = ['\\ ','\\(','\\)','\\&','\\\'','\\`']
+            other_i = i
+
+            for x in xrange(0,5):
+                other_i = other_i.replace(remplaza[x],remplazo[x])
 
             out = os.path.splitext(other_i)[0] + '.mp3'
             orden = 'ffmpeg -i %s -vn -ar 44100 -ac 2 -ab 256k -f mp3 '%other_i
             orden = orden + out
+
+            # TODO: Crear multiproceso en esta tarea
             os.system(orden)
 
             if os.path.exists(os.path.splitext(i)[0] + '.mp3'):
@@ -357,11 +349,10 @@ def Convert(path):
 
         else:
 
-            L.listerrors.append(i+'\n')
-            L.listerrors.append(orden+'\n')
-            L.listerrors.append(other_i+'\n')
-            L.listerrors.append(out+'\n')
-            L.listerrors.append('################################################'+'\n')
+            output = i + '\n' + orden + '\n' + other_i + '\n' + out + '\n' 
+
+            L.add(output)
+            L.add('################################################'+'\n')
 
 
 def CheckError():
