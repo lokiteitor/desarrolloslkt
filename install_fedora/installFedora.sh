@@ -30,6 +30,8 @@ dnf -y install terminator
 dnf -y install vim
 dnf -y install git
 dnf -y install htop
+dnf -y install rubygem-rhc
+dnf -y install eclipse
 
 # paquetes multimedia
 
@@ -59,28 +61,6 @@ usermod -aG docker lokiteitor
 echo "VirtualBox\n"
 echo "configura virtualbox extencion pack manualmente"
 
-# Configuracion Grub
-mv grub /etc/default/grub
-cp /boot/grub2/grub.cfg /boot/grub2/grub.cfg.bak
-
-grub2-mkfont --output=/boot/grub2/fonts/LiberationMono-Regular.pf2 --size=24 /usr/share/fonts/liberation/LiberationMono-Regular.ttf
-grub2-mkconfig -o /boot/grub2/grub.cfg
-
-dnf -y install plymouth-theme-solar
-plymouth-set-default-theme solar
-/usr/libexec/plymouth/plymouth-update-initrd
-
-
-
-# Instalacion del controlador grafico 
-dnf -y kmod-nvidia-340xx xorg-x11-drv-nvidia-340xx acpid
-mv /boot/initramfs-$(uname -r).img /boot/initramfs-$(uname -r)-nouveau.img
-dracut /boot/initramfs-$(uname -r).img $(uname -r)
-
-
-# Mover los .desktop de Sublime y Firefox
-
-#exec gitconfig.sh
 
 
 
