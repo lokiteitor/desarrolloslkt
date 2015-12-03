@@ -1,0 +1,6 @@
+1 ubuntu:14.04 on
+2 node:5.1-wheezy on
+3 node:0.12.8-wheezy on
+4 httpd:latest on
+5 mariadb:latest on
+6 mongo:latest on
