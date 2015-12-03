@@ -1,5 +1,20 @@
 #!/bin/bash
+#Copyright 2015 David Delgado Hernandez
 
+    # This file is part of install_server.
+
+    # install_server is free software: you can redistribute it and/or modify
+    # it under the terms of the GNU Lesser General Public License as published by
+    # the Free Software Foundation, either version 3 of the License, or
+    # (at your option) any later version.
+
+    # install_server is distributed in the hope that it will be useful,
+    # but WITHOUT ANY WARRANTY; without even the implied warranty of
+    # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    # GNU Lesser General Public License for more details.
+
+    # You should have received a copy of the GNU Lesser General Public License
+    # along with install_server.  If not, see <http://www.gnu.org/licenses/>.
 # revisar si las dependencias estan instaladas
 
 tempfile=`tempfile 2>/dev/null` || tempfile=/tmp/test$$
