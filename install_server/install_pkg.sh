@@ -42,16 +42,16 @@ arch=`uname -m`
 
 # TODO : que pasa con las arquitecturas i386 , las marca igual a las i586 e i686
 # Codigo cutre se puede mejorar
-if [[ $iddistro == "Debian" ]]; then
-    $iddistro="debian"
-    if [[ $arch == "x86_64" ]]; then
-        $arch="amd64"
+if [ $iddistro == "Debian" ]; then
+    iddistro="debian"
+    if [ $arch == "x86_64" ]; then
+        arch="amd64"
     fi
 
-elif [[ $iddistro == "Ubuntu" ]]; then
-    $iddistro="ubuntu"
-    if [[ $arch == "x86_64" ]]; then
-        $arch="amd64"
+elif [ $iddistro == "Ubuntu" ]; then
+    iddistro="ubuntu"
+    if [ $arch == "x86_64" ]; then
+        arch="amd64"
     fi
 fi
 
@@ -68,18 +68,18 @@ install_MariaDB (){
 
     idversion=`cut -b 2- $tempfileaux | cut -d "," -f 1`
 
-    if [[ $idversion == "1" ]]; then
+    if [ $idversion == "1" ]; then
         # Instalar la version 10.1
         repo='deb '$arch' http://nyc2.mirrors.digitalocean.com/mariadb/repo/10.1/'$iddistro" "$codename" main"
-        echo $repo
+        
     fi
-    if [[ $idversion = "2" ]]; then
+    if [ $idversion = "2" ]; then
         repo='deb '$arch' http://nyc2.mirrors.digitalocean.com/mariadb/repo/10.0/'$iddistro" "$codename" main"            
     fi
-    if [[ idversion = "3" ]]; then
+    if [ $idversion = "3" ]; then
         repo='deb '$arch' http://nyc2.mirrors.digitalocean.com/mariadb/repo/5.5/'$iddistro" "$codename" main"
     fi
-
+    echo $repo
     if [ "$user" == "root" ]; then
         apt-get install software-properties-common
         apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xcbcb082a1bb943db
