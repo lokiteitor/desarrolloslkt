@@ -1,5 +1,5 @@
-0 Actualizar off
+:0 Actualizar off
 1 openssh on 
 2 docker on
-3 Guest Additions off
-4 Web Server(apache-php) off
+3 Guest_Additions off
+4 Web_Server(apache-php) off
