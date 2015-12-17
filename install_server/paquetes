@@ -1,2 +1,4 @@
 1 openssh-server
 2 docker.io vim-syntax-docker
+3 dkms build-essential linux-headers-generic linux-headers-$(uname -r)
+4 apache2 libapache2-mod-php5 php5 php5-mcrypt

@@ -74,3 +74,7 @@ else
         echo sudo apt-get install -y ${lista[$i]}
     done
 fi
+
+
+# TODO: instrucciones especiales para por ejemplo
+# Guest additions
