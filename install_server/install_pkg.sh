@@ -71,7 +71,7 @@ if [ "$user" == "root" ]; then
 else
     echo "Necesitas estar logueado como root"
     for (( i = 0; i < ${#lista[@]}; i++ )); do
-        echo sudo apt-get install -y ${lista[$i]}
+        sudo apt-get install -y ${lista[$i]}
     done
 fi
 
