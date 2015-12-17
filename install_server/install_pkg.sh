@@ -70,18 +70,18 @@ install_MariaDB (){
 
     if [ $idversion == "1" ]; then
         # Instalar la version 10.1
-        repo='deb '$arch' http://nyc2.mirrors.digitalocean.com/mariadb/repo/10.1/'$iddistro" "$codename" main"
+        repo='deb [arch=amd64,i386] http://nyc2.mirrors.digitalocean.com/mariadb/repo/10.1/'$iddistro" "$codename" main"
         
     fi
     if [ $idversion = "2" ]; then
-        repo='deb '$arch' http://nyc2.mirrors.digitalocean.com/mariadb/repo/10.0/'$iddistro" "$codename" main"            
+        repo='deb [arch=amd64,i386] http://nyc2.mirrors.digitalocean.com/mariadb/repo/10.0/'$iddistro" "$codename" main"            
     fi
     if [ $idversion = "3" ]; then
-        repo='deb '$arch' http://nyc2.mirrors.digitalocean.com/mariadb/repo/5.5/'$iddistro" "$codename" main"
+        repo='deb [arch=amd64,i386] http://nyc2.mirrors.digitalocean.com/mariadb/repo/5.5/'$iddistro" "$codename" main"
     fi
     echo $repo
     if [ "$user" == "root" ]; then
-        apt-get install software-properties-common
+        apt-get install -y software-properties-common
         apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xcbcb082a1bb943db
         add-apt-repository $repo
 
@@ -90,7 +90,7 @@ install_MariaDB (){
     else
         echo "Necesitas estar logueado como root"
 
-        sudo apt-get install software-properties-common
+        sudo apt-get install -y software-properties-common
         sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xcbcb082a1bb943db
         sudo add-apt-repository $repo
         sleep 2
