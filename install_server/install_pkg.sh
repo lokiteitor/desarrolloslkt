@@ -22,6 +22,7 @@ DIALOG=dialog
 
 # crea un archivo temporal donde guardar las selecciones
 tempfile=`tempfile 2>/dev/null` || tempfile=/tmp/test$$
+
 # al finalizar el script borra el archivo temporal
 trap "rm -f $tempfile" 0 1 2 5 15
 #tempfile=$PWD/log
@@ -29,6 +30,72 @@ paquetesid=`cat paquetes_id`
 paquetes=`cat paquetes`
 user=$(whoami)
 
+
+# Revisar Arquitectura y version de distribucion
+
+# TODO : Para mayor compatibilidad agregar los id de mas distros
+
+iddistro=`lsb_release -i | cut -f2`
+codename=`lsb_release -c | cut -f2`
+release=`lsb_release -r | cut -f2`
+arch=`uname -m`
+
+# TODO : que pasa con las arquitecturas i386 , las marca igual a las i586 e i686
+# Codigo cutre se puede mejorar
+if [[ $iddistro == "Debian" ]]; then
+    $iddistro="debian"
+    if [[ $arch == "x86_64" ]]; then
+        $arch="amd64"
+    fi
+
+elif [[ $iddistro == "Ubuntu" ]]; then
+    $iddistro="ubuntu"
+    if [[ $arch == "x86_64" ]]; then
+        $arch="amd64"
+    fi
+fi
+
+# Funcion para instalar la version indicada de MariaDB
+
+install_MariaDB (){
+    tempfileaux=`tempfileaux 2>/dev/null` || tempfileaux=/tmp/testaux$$
+
+    trap "rm -f $tempfileaux" 0 1 2 5 15
+
+
+    $DIALOG --output-separator "," --title "MariaDB" --radiolist  "Seleccione la version de MariaDB" 10 40 7 \
+    1 "MariaDB 10.1" on 2 "MariaDB 10.0" off 3 "MariaDB 5.5" off 2> "$tempfileaux";
+
+    idversion=`cut -b 2- $tempfileaux | cut -d "," -f 1`
+
+    if [[ $idversion == "1" ]]; then
+        # Instalar la version 10.1
+        repo='deb '$arch' http://nyc2.mirrors.digitalocean.com/mariadb/repo/10.1/'$iddistro" "$codename" main"
+        echo $repo
+    fi
+    if [[ $idversion = "2" ]]; then
+        repo='deb '$arch' http://nyc2.mirrors.digitalocean.com/mariadb/repo/10.0/'$iddistro" "$codename" main"            
+    fi
+    if [[ idversion = "3" ]]; then
+        repo='deb '$arch' http://nyc2.mirrors.digitalocean.com/mariadb/repo/5.5/'$iddistro" "$codename" main"
+    fi
+
+    if [ "$user" == "root" ]; then
+        apt-get install software-properties-common
+        apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xcbcb082a1bb943db
+
+
+        add-apt-repository $repo
+
+    else
+        echo "Necesitas estar logueado como root"
+
+        sudo apt-get install software-properties-common
+        sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xcbcb082a1bb943db
+        sudo add-apt-repository $repo
+    fi
+
+}
 
 $DIALOG --title "install server" --infobox  "A continuacion podra elegir los paquetes que \
                                 requiere su servidor" 10 30; sleep 2
@@ -46,6 +113,11 @@ echo "Paquetes que instalare:"
 
 for (( i = 1; i < len; i++ )); do
     idpkg=`cut -b 2- $tempfile | cut -d "," -f $i`
+    # Revisar si la opcion es la base de datos MariaDB
+    if [ $idpkg == "5" ]; then
+       install_MariaDB
+    fi
+
     pkg=`cat paquetes | grep -e "^"$idpkg | cut -b 3-`
     lista[$i-1]=$pkg
 
