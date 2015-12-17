@@ -85,7 +85,7 @@ install_MariaDB (){
         apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xcbcb082a1bb943db
         add-apt-repository "$repo"
         apt-get update
-        apt-get install mariadb-server
+        apt-get install -y mariadb-server
         sleep 2
 
     else
@@ -95,9 +95,11 @@ install_MariaDB (){
         sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xcbcb082a1bb943db
         sudo add-apt-repository "$repo"
         sudo apt-get update
-        sudo apt-get install mariadb-server
+        sudo apt-get install -y mariadb-server
         sleep 2
     fi
+
+    mysql_secure_installation
 
 }
 
