@@ -83,7 +83,7 @@ install_MariaDB (){
     if [ "$user" == "root" ]; then
         apt-get install -y software-properties-common
         apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xcbcb082a1bb943db
-        add-apt-repository $repo
+        add-apt-repository "$repo"
 
         sleep 2
 
@@ -92,7 +92,7 @@ install_MariaDB (){
 
         sudo apt-get install -y software-properties-common
         sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xcbcb082a1bb943db
-        sudo add-apt-repository $repo
+        sudo add-apt-repository "$repo"
         sleep 2
     fi
 
