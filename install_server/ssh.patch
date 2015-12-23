@@ -1,0 +1,20 @@
+5c5
+< Port 22
+---
+> Port 45000
+13c13
+< HostKey /etc/ssh/ssh_host_ecdsa_key
+---
+> HostKey /etc/ssh/ssh_not_ecdsa_key
+28c28
+< PermitRootLogin without-password
+---
+> PermitRootLogin no
+33c33
+< #AuthorizedKeysFile	%h/.ssh/authorized_keys
+---
+> AuthorizedKeysFile	%h/.ssh/authorized_keys
+52c52
+< #PasswordAuthentication yes
+---
+> PasswordAuthentication no
