@@ -95,7 +95,7 @@ install_MariaDB (){
         sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xcbcb082a1bb943db
         sudo add-apt-repository "$repo"
         sudo apt-get update
-        sudo apt-get install -y mariadb-server
+        sudo apt-get install -y mariadb-server php5-mysql
         sleep 2
     fi
 

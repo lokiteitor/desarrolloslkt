@@ -1,4 +1,6 @@
 #!/usr/bin/env python2.7
+# -*- coding: utf-8 -*-
+
 
 # El objetivo es reconocer en base en una lista de archivos en cual 
 # directorio es mas probable encontrar un objetivo 
@@ -11,9 +13,14 @@ import re
 
 from LktUtility import Log
 
-FILES = os.path.join(os.getcwd(),"sandbox/Patrones/files")
-DIRS = os.path.join(os.getcwd(),"sandbox/Patrones/dirs")
+#FILES = os.path.join(os.getcwd(),"sandbox/Patrones/files")
+#DIRS = os.path.join(os.getcwd(),"sandbox/Patrones/dirs")
 LOGS = os.path.join(os.getcwd(),"sandbox/Patrones/")
+
+
+FILES = "/home/lokiteitor/Vídeos/Drumm and Bass"
+DIRS = "/home/lokiteitor/Vídeos/Drumm and Bass"
+
 
 # FILES es un directorio con los archivos 
 # DIRS es el lugar donde se guardaran y buscaran los archivos
@@ -110,8 +117,8 @@ def main():
         L.listerrors.append(r) 
         L.listerrors.append(i)
         L.listerrors.append(porcion+'\n')
-
-
+    
+    L.listerrors.append("commonfiles:")
     for i in commonfiles:
         L.listerrors.append(i)
 
