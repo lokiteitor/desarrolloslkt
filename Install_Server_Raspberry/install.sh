@@ -39,9 +39,19 @@ if [ "$user" == "root" ]; then
     while read line
     do 
        pkg=`echo -e "$line"`
-       apt-get install $pkg
+       apt-get install -y $pkg
     done < pkg.cfg
+
+    # Instalacion de nodejs
+    curl -sL https://deb.nodesource.com/setup_4.x | bash -
+    apt-get install -y nodejs
+    # Instalando Composer
+    php composer-setup.php --install-dir=/usr/local/bin/composer --filename=composer
+    # Instalacion de bower
+    npm install -g bower
 
 else
     echo "Necesitas estar logueado como root"
 fi
+
+
