@@ -41,9 +41,7 @@ if [ "$user" == "root" ]; then
        pkg=`echo -e "$line"`
        apt-get install $pkg
     done < pkg.cfg
-done
 
 else
     echo "Necesitas estar logueado como root"
-    done
 fi
