@@ -24,6 +24,8 @@ dnf -y install blueman
 dnf -y install gnome-tweak-tool
 dnf -y install brasero
 
+dnf -y install filezilla
+
 
 # Paquetes basicos
 dnf -y install terminator
@@ -37,11 +39,10 @@ dnf -y install eclipse
 
 dnf -y install gimp
 dnf -y install gmusicbrowser moc
-
+dnf -y install spotify-client
 
 # Desinstalacion de paquetes no utiles
 
-dnf -y remove firefox*
 dnf -y remove evolution
 
 # paquetes de virtualizacion
