@@ -34,12 +34,25 @@ dnf -y install git
 dnf -y install htop
 dnf -y install rubygem-rhc
 dnf -y install eclipse
+dnf -y install pv
 
 # paquetes multimedia
 
 dnf -y install gimp
 dnf -y install gmusicbrowser moc
 dnf -y install spotify-client
+
+# internet
+dnf -y install transmission-remote-gtk
+dnf -y install thunderbird
+
+# productividad
+dnf -y install planner hamster-time-tracker
+dnf -y install dia pencil
+dnf -y gpick inkscape
+
+# configuracion
+dnf -y install cups gutenprint
 
 # Desinstalacion de paquetes no utiles
 
