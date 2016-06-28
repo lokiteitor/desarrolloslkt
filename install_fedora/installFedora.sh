@@ -35,6 +35,7 @@ dnf -y install htop
 dnf -y install rubygem-rhc
 dnf -y install eclipse
 dnf -y install pv
+dnf -y install meld
 
 # paquetes multimedia
 
@@ -49,7 +50,7 @@ dnf -y install thunderbird
 # productividad
 dnf -y install planner hamster-time-tracker
 dnf -y install dia pencil
-dnf -y gpick inkscape
+dnf -y install gpick inkscape
 
 # configuracion
 dnf -y install cups gutenprint
@@ -75,7 +76,10 @@ usermod -aG docker lokiteitor
 echo "VirtualBox\n"
 echo "configura virtualbox extencion pack manualmente"
 
-
+# configurar plymouth
+dnf install -y plymouth-theme-solar
+plymouth-set-default-theme solar
+/usr/libexec/plymouth/plymouth-update-initrd
 
 
 

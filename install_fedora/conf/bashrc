@@ -1,0 +1,30 @@
+# .bashrc
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+	. /etc/bashrc
+fi
+
+# Uncomment the following line if you don't like systemctl's auto-paging feature:
+# export SYSTEMD_PAGER=
+
+# User specific aliases and functions
+
+ARCHIVOS=/media/Archivos
+MUSICREMOTE=/mnt/LKT/lokiteitor/playlist/
+alias rsDrm="rsync -avv lokiteitor@192.168.1.79:\"$MUSICREMOTE/Drum\ and\ Bass/conv/\" $ARCHIVOS/Musica/Monstercat/'Drum and Bass'"
+
+alias rsDstp='rsync -avv lokiteitor@192.168.1.79:$MUSICREMOTE/Drumstep/conv/ $ARCHIVOS/Musica/Monstercat/Drumstep/'
+
+alias rsDbstp='rsync -avv lokiteitor@192.168.1.79:$MUSICREMOTE/Dubstep/conv/ $ARCHIVOS/Musica/Monstercat/Dubstep'
+
+alias rsElec='rsync -avv lokiteitor@192.168.1.79:$MUSICREMOTE/Electro/conv/ $ARCHIVOS/Musica/Monstercat/Electro'
+
+alias rsHou='rsync -avv lokiteitor@192.168.1.79:$MUSICREMOTE/House/conv/ $ARCHIVOS/Musica/Monstercat/House'
+
+alias rsOst="rsync -avv lokiteitor@192.168.1.79:\"$MUSICREMOTE/epic\ ost/conv/\" $ARCHIVOS/Musica/'epic ost'"
+alias rsOp4="rsync -avv lokiteitor@192.168.1.79:\"$MUSICREMOTE/Opening\ \&\ endning\ ver\ 4/conv/\" $ARCHIVOS/Musica/'Opening & endning ver 4'"
+
+alias rsMonstercat='rsDrm && rsDstp && rsDbstp && rsElec && rsHou'
+alias rsAnime='rsOst && rsOp4'
+

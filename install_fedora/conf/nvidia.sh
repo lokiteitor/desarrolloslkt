@@ -5,6 +5,8 @@
 
 #grub2-mkconfig -o /boot/grub2/grub.cfg
 
+
+dnf install -y plymouth-theme-solar
 plymouth-set-default-theme solar
 /usr/libexec/plymouth/plymouth-update-initrd
 
